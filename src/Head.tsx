@@ -14,7 +14,7 @@ import Img from "./Img";
 function Head() {
   return (
     <>
-      <Box sx={{ bgcolor: "#121315", minHeight: "100vh", color: "#ffffff" }}>
+      <Box sx={{ bgcolor: "#121315", minHeight: "auto", color: "#ffffff" }}>
         <AppBar
           position="static"
           elevation={0}
@@ -145,14 +145,14 @@ function Head() {
 
         <Box
           sx={{
-            width: "100%",
+            width: "auto",
             height: { xs: "400px", md: "550px" },
             bgcolor: "#c8bcac", // Cor bege do chão do modelo 3D
             position: "relative",
             mt: 4,
           }}
         >
-          <Img/>
+          <Img />
         </Box>
       </Box>
     </>
