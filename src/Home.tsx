@@ -6,8 +6,8 @@ function Home() {
   return (
     <>
       <Head />
-      <Major />
       <Signboard />
+      <Major />
     </>
   );
 }

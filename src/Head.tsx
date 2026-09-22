@@ -147,7 +147,7 @@ function Head() {
           sx={{
             width: "auto",
             height: { xs: "400px", md: "550px" },
-            bgcolor: "#c8bcac", // Cor bege do chão do modelo 3D
+            bgcolor: "#c8bcac", 
             position: "relative",
             mt: 4,
           }}
