@@ -85,6 +85,8 @@ function Major() {
                     alignItems: "center",
                     p: 2,
                     "&:last-child": { pb: 2 },
+                    bgcolor: "black",
+                    color:"white"
                   }}
                 >
                   <Typography variant="body2" component="p">

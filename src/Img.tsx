@@ -3,9 +3,10 @@ import { ImageList, ImageListItem, ListSubheader } from "@mui/material";
 function Img() {
   return (
     <>
-      <ImageList sx={{ width: 500, height: 450 }}>
+      <ImageList sx={{ width: 500, height: 450,
+       }}>
         <ImageListItem key="Subheader" cols={2}>
-          <ListSubheader component="div" sx={{ fontWeight: "bold" }}>
+          <ListSubheader component="div" sx={{ fontWeight: "bold",bgcolor:"black",color:"white" }}>
             Nossos Produtos
           </ListSubheader>
         </ImageListItem>
