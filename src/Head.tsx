@@ -4,14 +4,25 @@ import {
   Box,
   Button,
   Container,
+  IconButton,
   ImageList,
   Toolbar,
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import Img from "./Img";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
-function Head() {
+export interface Produto {
+  id: number;
+  nome: string;
+  legenda: string;
+}
+interface HeaderProps {
+  carrinho: Produto[];
+  onOpenCarrinho: () => void;
+}
+
+function Head({ carrinho, onOpenCarrinho }: HeaderProps) {
   return (
     <>
       <Box sx={{ bgcolor: "#121315", minHeight: "auto", color: "#ffffff" }}>
@@ -89,22 +100,21 @@ function Head() {
                   letterSpacing: 2,
                 }}
               >
-                <Badge badgeContent={1} color="warning" sx={{ mr: 1 }}>
-                  LISTA
-                </Badge>
+                <IconButton
+                  color="inherit"
+                  onClick={onOpenCarrinho}
+                  aria-label="carrinho de compras"
+                >
+                  <Badge badgeContent={carrinho.length} color="primary">
+                    <ShoppingCartIcon sx={{ color: "white" }} />
+                  </Badge>
+                </IconButton>
               </Button>
             </Toolbar>
           </Container>
         </AppBar>
 
         <Container maxWidth="xl" sx={{ pt: { xs: 4, md: 8 }, pb: 4 }}>
-          <Typography
-            variant="caption"
-            sx={{ letterSpacing: 3, opacity: 0.5, display: "block", mb: 2 }}
-          >
-            01 / ESTRUTURA
-          </Typography>
-
           <Grid container spacing={4} alignItems="flex-end">
             <Grid item={{ xs: 12, md: 7 }}>
               <Typography
@@ -151,9 +161,7 @@ function Head() {
             position: "relative",
             mt: 4,
           }}
-        >
-          <Img />
-        </Box>
+        ></Box>
       </Box>
     </>
   );
