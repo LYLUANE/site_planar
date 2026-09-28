@@ -10,19 +10,24 @@ import {
   Typography,
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import Bag from "./Bag";
+import type { Produto } from "./Major";
 
-export interface Produto {
-  id: number;
-  nome: string;
-  legenda: string;
-}
-
-interface HeaderProps {
+interface HeadProps {
   carrinho: Produto[];
+  carrinhoAberto: boolean;
   onOpenCarrinho: () => void;
+  onCloseCarrinho: () => void;
+  onRemoverDoCarrinho: (produto: Produto) => void;
 }
 
-function Head({ carrinho, onOpenCarrinho }: HeaderProps) {
+function Head({
+  carrinho,
+  carrinhoAberto,
+  onOpenCarrinho,
+  onCloseCarrinho,
+  onRemoverDoCarrinho,
+}: HeadProps) {
   return (
     <Box sx={{ bgcolor: "#121315", minHeight: "auto", color: "#ffffff" }}>
       <AppBar
@@ -34,10 +39,7 @@ function Head({ carrinho, onOpenCarrinho }: HeaderProps) {
         }}
       >
         <Container maxWidth="xl">
-          <Toolbar
-            disableGutters
-            sx={{ justifyContent: "space-between", py: 1 }}
-          >
+          <Toolbar disableGutters sx={{ justifyContent: "space-between", py: 1 }}>
             <Typography
               variant="body2"
               sx={{ letterSpacing: 3, fontWeight: 700, color: "#e0e0e0" }}
@@ -87,20 +89,29 @@ function Head({ carrinho, onOpenCarrinho }: HeaderProps) {
               </Button>
             </Box>
 
-            <IconButton
-              color="inherit"
-              onClick={onOpenCarrinho}
-              aria-label="carrinho de compras"
-              sx={{
-                border: "1px solid rgba(255, 255, 255, 0.2)",
-                borderRadius: 0,
-                p: 1,
-              }}
-            >
-              <Badge badgeContent={carrinho.length} color="primary">
-                <ShoppingCartIcon sx={{ color: "white" }} />
-              </Badge>
-            </IconButton>
+            <Box>
+              <IconButton
+                color="inherit"
+                onClick={onOpenCarrinho}
+                aria-label="carrinho de compras"
+                sx={{
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  borderRadius: 0,
+                  p: 1,
+                }}
+              >
+                <Badge badgeContent={carrinho.length} color="primary">
+                  <ShoppingCartIcon sx={{ color: "white" }} />
+                </Badge>
+              </IconButton>
+
+              <Bag
+                carrinho={carrinho}
+                open={carrinhoAberto}
+                onClose={onCloseCarrinho}
+                onRemoverDoCarrinho={onRemoverDoCarrinho}
+              />
+            </Box>
           </Toolbar>
         </Container>
       </AppBar>

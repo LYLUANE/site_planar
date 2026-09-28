@@ -12,14 +12,27 @@ function Home() {
     setCarrinho((prev) => [...prev, produto]);
   };
 
+  const removerDoCarrinho = (produtoRemover: Produto) => {
+    setCarrinho((prev) => prev.filter((item) => item.id !== produtoRemover.id));
+  };
+
   const handleOpenCarrinho = () => {
     setCarrinhoAberto(true);
-    //  abrir o Drawer ou Drawer/Modal do carrinho
+  };
+
+  const handleCloseCarrinho = () => {
+    setCarrinhoAberto(false);
   };
 
   return (
     <>
-      <Head carrinho={carrinho} onOpenCarrinho={handleOpenCarrinho} />
+      <Head
+        carrinho={carrinho}
+        carrinhoAberto={carrinhoAberto}
+        onOpenCarrinho={handleOpenCarrinho}
+        onCloseCarrinho={handleCloseCarrinho}
+        onRemoverDoCarrinho={removerDoCarrinho}
+      />
       <Major onAdicionarAoCarrinho={adicionarAoCarrinho} />
       <Signboard />
     </>

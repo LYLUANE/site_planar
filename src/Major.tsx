@@ -21,9 +21,10 @@ export interface Produto {
   id: number;
   nome: string;
   legenda: string;
+  preco: Number;
 }
 
-interface MajorProps {
+export interface MajorProps {
   onAdicionarAoCarrinho: (produto: Produto) => void;
 }
 
@@ -34,39 +35,44 @@ function Major({ onAdicionarAoCarrinho }: MajorProps) {
       nome: criado_mudo,
       legenda:
         "Criado-mudo de medidas 45cm x 35cm x 55cm, madeira pinus envernizada e estrutura de metalon.",
+      preco: 280.0,
     },
     {
       id: 2,
       nome: escada,
       legenda:
         "Escada auxiliar de 2 degraus de medidas 40cm x 40cm x 45cm, madeira pinus envernizada e estrutura de metalon.",
+      preco: 190.0,
     },
     {
       id: 3,
       nome: mesa,
       legenda:
         "Mesa de escritório/estudo de medidas 120cm x 60cm x 75cm, madeira pinus envernizada e estrutura de metalon.",
+      preco: 580.0,
     },
     {
       id: 4,
       nome: quadro,
       legenda:
         "Moldura de quadro decorativo de medidas 30cm x 30cm, estrutura minimalista em metalon.",
+      preco: 95.0,
     },
     {
       id: 5,
       nome: estante,
       legenda:
         "Estante de medidas 90cm x 180cm x 34cm, três planos de madeira maciça de 30mm apoiados em colunas de aço escovado.",
+      preco: 1450.0,
     },
     {
       id: 6,
       nome: mesa_reta,
       legenda:
         "Mesa Industrial de medidas 160cm x 78cm x 80cm, tampo maciço sobre base tubular de aço escovado.",
+      preco: 1890.0,
     },
   ];
-
   return (
     <Box sx={{ width: "100%", px: 2, py: { xs: 4, md: 6 } }}>
       <Typography
