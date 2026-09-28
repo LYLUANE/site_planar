@@ -8,18 +8,21 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+
 import criado_mudo from "./assets/produtos/criado_mudo.jpeg";
 import escada from "./assets/produtos/escada.jpeg";
 import mesa from "./assets/produtos/mesa.jpeg";
 import quadro from "./assets/produtos/quadro.jpeg";
 import estante from "./assets/produtos/estante.jpeg";
 import mesa_reta from "./assets/produtos/mesa-reta.jpeg";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-interface Produto {
+
+export interface Produto {
   id: number;
   nome: string;
   legenda: string;
 }
+
 interface MajorProps {
   onAdicionarAoCarrinho: (produto: Produto) => void;
 }
@@ -91,21 +94,17 @@ function Major({ onAdicionarAoCarrinho }: MajorProps) {
         <Grid
           container
           spacing={{ xs: 2, md: 3 }}
-          justifyContent="center"
           sx={{
             maxWidth: 1200,
             width: "100%",
             margin: "0 auto",
+            justifyContent: "center",
           }}
         >
-          {produtos.map((imagem, index) => (
+          {produtos.map((produto) => (
             <Grid
-              item
-              key={index}
-              xs={12}
-              sm={6}
-              md={4}
-              lg={3}
+              key={produto.id}
+              size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
               sx={{ display: "flex", justifyContent: "center" }}
             >
               <Card
@@ -121,14 +120,14 @@ function Major({ onAdicionarAoCarrinho }: MajorProps) {
               >
                 <CardMedia
                   component="img"
-                  image={imagem.nome}
+                  image={produto.nome}
                   sx={{
                     height: 280,
                     width: "100%",
                     objectFit: "cover",
                     objectPosition: "center",
                   }}
-                  alt={`Produto ${imagem.id}`}
+                  alt={`Produto ${produto.id}`}
                 />
                 <CardContent
                   sx={{
@@ -140,12 +139,12 @@ function Major({ onAdicionarAoCarrinho }: MajorProps) {
                   }}
                 >
                   <Typography variant="body2" component="p">
-                    {imagem.legenda}
+                    {produto.legenda}
                   </Typography>
                 </CardContent>
                 <CardActions sx={{ justifyContent: "flex-end", px: 2, pb: 2 }}>
                   <IconButton
-                    onClick={() => onAdicionarAoCarrinho(imagem)}
+                    onClick={() => onAdicionarAoCarrinho(produto)}
                     sx={{
                       color: "white",
                       bgcolor: "rgba(255, 255, 255, 0.1)",

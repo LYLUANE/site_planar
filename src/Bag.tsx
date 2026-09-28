@@ -109,7 +109,6 @@ function Bag({ open, onClose, carrinho, onRemoverDoCarrinho }: CarrinhoProps) {
         )}
       </Box>
 
-      {/* Rodapé do Carrinho */}
       {carrinho.length > 0 && (
         <Box sx={{ pt: 2, borderTop: "1px solid #333" }}>
           <Button
