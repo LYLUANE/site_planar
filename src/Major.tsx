@@ -101,7 +101,7 @@ function Major({ onAdicionarAoCarrinho }: MajorProps) {
           container
           spacing={{ xs: 2, md: 3 }}
           sx={{
-            maxWidth: 1200,
+            maxWidth: 1800,
             width: "100%",
             margin: "0 auto",
             justifyContent: "center",

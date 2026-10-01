@@ -35,7 +35,7 @@ interface CarrinhoProps {
 }
 
 function Bag({ open, onClose, carrinho, onRemoverDoCarrinho }: CarrinhoProps) {
-  // Estado para armazenar o produto selecionado para exclusão
+
   const [produtoParaDeletar, setProdutoParaDeletar] = useState<Produto | null>(
     null,
   );

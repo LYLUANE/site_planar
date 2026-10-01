@@ -3,6 +3,7 @@ import Head from "./Head";
 import Major from "./Major";
 import type { Produto } from "./Major";
 import Signboard from "./Signboard";
+import Footer from "./Footer";
 
 function Home() {
   const [carrinho, setCarrinho] = useState<Produto[]>([]);
@@ -33,8 +34,10 @@ function Home() {
         onCloseCarrinho={handleCloseCarrinho}
         onRemoverDoCarrinho={removerDoCarrinho}
       />
+      <Signboard />
       <Major onAdicionarAoCarrinho={adicionarAoCarrinho} />
       <Signboard />
+      <Footer />
     </>
   );
 }
