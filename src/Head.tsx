@@ -39,7 +39,10 @@ function Head({
         }}
       >
         <Container maxWidth="xl">
-          <Toolbar disableGutters sx={{ justifyContent: "space-between", py: 1 }}>
+          <Toolbar
+            disableGutters
+            sx={{ justifyContent: "space-between", py: 1 }}
+          >
             <Typography
               variant="body2"
               sx={{ letterSpacing: 3, fontWeight: 700, color: "#e0e0e0" }}
@@ -145,9 +148,10 @@ function Head({
                 fontSize: "1rem",
                 lineHeight: 1.6,
                 maxWidth: "420px",
+               
               }}
             >
-              Móveis industriais de aço e madeira. Cada parafuso, cada tubo,
+              Móveis Industriais de aço e madeira. Cada parafuso, cada tubo,
               cada tampo — visíveis. Arraste o controle e veja como a Mesa
               Industrial é construída por dentro.
             </Typography>
