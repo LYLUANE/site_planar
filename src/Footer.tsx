@@ -28,7 +28,7 @@ function Footer() {
               sx={{
                 fontWeight: 700,
                 letterSpacing: 2,
-                color: "#white",
+                color: "white",
                 mb: 1.5,
                 textTransform: "uppercase",
               }}
@@ -44,7 +44,7 @@ function Footer() {
           <Grid size={{ xs: 12, sm: 3 }}>
             <Typography
               variant="subtitle1"
-              sx={{ fontWeight: 700, mb: 1.5, color: "#white" }}
+              sx={{ fontWeight: 700, mb: 1.5, color: "white" }}
             >
               Navegação
             </Typography>
@@ -52,23 +52,16 @@ function Footer() {
               <Link
                 href="#inicio"
                 underline="hover"
-                sx={{ color: "white", fontSize: "0.875rem" }}
+                sx={{ color: "white", fontSize: "0.875rem", cursor: "pointer" }}
               >
                 Início
               </Link>
               <Link
                 href="#produtos"
                 underline="hover"
-                sx={{ color: "white", fontSize: "0.875rem" }}
+                sx={{ color: "white", fontSize: "0.875rem", cursor: "pointer" }}
               >
                 Produtos
-              </Link>
-              <Link
-                href="#sobre"
-                underline="hover"
-                sx={{ color: "white", fontSize: "0.875rem" }}
-              >
-                Sobre Nós
               </Link>
             </Stack>
           </Grid>
@@ -84,25 +77,23 @@ function Footer() {
               <Stack direction="row" alignItems="center" spacing={1}>
                 <LocalPostOffice fontSize="small" sx={{ color: "white" }} />
                 <Typography variant="body2">Email:</Typography>
-                <Link
-                  href="mailto:planar_moveis@gmail.com"
-                  underline="hover"
+                <Typography
+                  variant="body2"
                   sx={{ color: "white", fontWeight: 600 }}
                 >
                   planar_moveis@gmail.com
-                </Link>
+                </Typography>
               </Stack>
 
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Call fontSize="small" sx={{ color: "white" }} />
                 <Typography variant="body2">Telefone:</Typography>
-                <Link
-                  href="tel:14996651162"
-                  underline="hover"
+                <Typography
+                  variant="body2"
                   sx={{ color: "white", fontWeight: 600 }}
                 >
                   (14) 99665-1162
-                </Link>
+                </Typography>
               </Stack>
             </Stack>
           </Grid>

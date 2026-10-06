@@ -76,12 +76,14 @@ function Major({ onAdicionarAoCarrinho }: MajorProps) {
   return (
     <Box sx={{ width: "100%", px: 2, py: { xs: 4, md: 6 } }}>
       <Typography
+      
         variant="h5"
         sx={{
           fontWeight: "bold",
           color: "white",
           mb: 3,
           textAlign: "center",
+          id:"#produtos"
         }}
       >
         Nossos Produtos

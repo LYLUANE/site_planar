@@ -29,7 +29,14 @@ function Head({
   onRemoverDoCarrinho,
 }: HeadProps) {
   return (
-    <Box sx={{ bgcolor: "#121315", minHeight: "auto", color: "#ffffff" }}>
+    <Box
+      sx={{
+        bgcolor: "#121315",
+        minHeight: "auto",
+        color: "#ffffff",
+        id: "inicio",
+      }}
+    >
       <AppBar
         position="static"
         elevation={0}
@@ -148,7 +155,6 @@ function Head({
                 fontSize: "1rem",
                 lineHeight: 1.6,
                 maxWidth: "420px",
-               
               }}
             >
               Móveis Industriais de aço e madeira. Cada parafuso, cada tubo,
