@@ -13,7 +13,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Bag from "./Bag";
 import type { Produto } from "./Major";
 import ScrollReveal from "./Scroll";
-
+import GLBViewer from "./three";
 interface HeadProps {
   carrinho: Produto[];
   carrinhoAberto: boolean;
@@ -128,7 +128,7 @@ function Head({
           </Container>
         </AppBar>
       </ScrollReveal>
-      <ScrollReveal direction="up">
+      <ScrollReveal direction="down">
         <Container maxWidth="xl" sx={{ pt: { xs: 4, md: 8 }, pb: 4 }}>
           <Grid container spacing={4} sx={{ alignItems: "flex-end" }}>
             <Grid size={{ xs: 12, md: 7 }}>
@@ -162,7 +162,7 @@ function Head({
               >
                 Móveis Industriais de aço e madeira. Cada parafuso, cada tubo,
                 cada tampo — visíveis. Arraste o controle e veja como a Mesa
-                Industrial é construída por dentro.
+                Industrial é feita. Use o scroll para ampliar o holograma! 
               </Typography>
             </Grid>
           </Grid>
@@ -170,14 +170,15 @@ function Head({
       </ScrollReveal>
 
       <Box
-        sx={{
-          width: "auto",
-          height: { xs: "400px", md: "550px" },
-          bgcolor: "#c8bcac",
-          position: "relative",
-          mt: 4,
-        }}
+        // sx={{
+        //   width: "auto",
+        //   height: "500px",
+      
+        //   position: "relative",
+        //   mt: 4,
+        // }}
       />
+      <GLBViewer url="src\assets\produtos\mesa-reta-holograma.glb" />
     </Box>
   );
 }
