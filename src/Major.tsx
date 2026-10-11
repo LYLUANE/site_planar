@@ -75,15 +75,22 @@ function Major({ onAdicionarAoCarrinho }: MajorProps) {
   ];
 
   return (
-    /* Adicionamos o id "produtos" sem o '#' aqui no Box principal */
-    <Box id="produtos" sx={{ width: "100%", px: 2, py: { xs: 4, md: 6 } }}>
+    <Box
+      id="produtos"
+      sx={{ width: "100%", px: 2, py: { xs: 4, md: 6 }, bgcolor: "#654321 " }}
+    >
       <Typography
-        variant="h5"
+        variant="body2"
         sx={{
-          fontWeight: "bold",
+          fontWeight: "500",
           color: "white",
           mb: 3,
           textAlign: "center",
+          letterSpacing: "2px",
+
+          fontSize: "0.85rem",
+          textTransform: "uppercase",
+          px: 3,
         }}
       >
         Nossos Produtos

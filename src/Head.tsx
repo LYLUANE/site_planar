@@ -67,7 +67,6 @@ function Head({
               </Typography>
 
               <Box sx={{ display: { xs: "none", md: "flex" }, gap: 4 }}>
-                {/* Direciona para a animação da mesa (Início) */}
                 <Button
                   component="a"
                   href="#inicio"
@@ -82,7 +81,7 @@ function Head({
                 >
                   Estrutura
                 </Button>
-                {/* Direciona para o catálogo de produtos */}
+
                 <Button
                   component="a"
                   href="#produtos"
@@ -97,7 +96,7 @@ function Head({
                 >
                   Catálogo
                 </Button>
-                {/* Direciona para o Footer (Contato) */}
+
                 <Button
                   component="a"
                   href="#contato"
@@ -120,13 +119,14 @@ function Head({
                   onClick={onOpenCarrinho}
                   aria-label="carrinho de compras"
                   sx={{
+                    position: "fixed",
                     border: "1px solid rgba(255, 255, 255, 0.2)",
                     borderRadius: 0,
                     p: 1,
                   }}
                 >
                   <Badge badgeContent={carrinho.length} color="primary">
-                    <ShoppingCartIcon sx={{ color: "white" }} />
+                    <ShoppingCartIcon sx={{ color: "#c8bcac" }} />
                   </Badge>
                 </IconButton>
 

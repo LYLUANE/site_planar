@@ -11,7 +11,7 @@ function Footer() {
   return (
     <Box
       component="footer"
-      id="contato" // Adicionado aqui para o link do menu apontar diretamente para o rodapé
+      id="contato" 
       sx={{
         bgcolor: "#c8bcac",
         color: "white",
