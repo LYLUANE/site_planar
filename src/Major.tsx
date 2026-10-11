@@ -164,7 +164,7 @@ function Major({ onAdicionarAoCarrinho }: MajorProps) {
                       color: "white",
                       bgcolor: "rgba(255, 255, 255, 0.1)",
                       "&:hover": {
-                        bgcolor: "primary.main",
+                        bgcolor: "#654321",
                       },
                     }}
                     aria-label="adicionar ao carrinho"

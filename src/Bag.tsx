@@ -1,49 +1,49 @@
-import React, { useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import {
+  Avatar,
   Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
   Drawer,
-  Typography,
   IconButton,
   List,
   ListItem,
   ListItemAvatar,
-  Avatar,
   ListItemText,
-  Divider,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
+  Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import React, { useState } from "react";
 
 export interface Produto {
   id: number;
   nome: string;
   legenda: string;
-  preco:Number
+  preco: number;
 }
 
 interface CarrinhoProps {
   open: boolean;
   onClose: () => void;
   carrinho: Produto[];
-  onRemoverDoCarrinho: (produtoRemover: Produto) => void;
+
+  onRemoverDoCarrinho: (indexParaRemover: number) => void;
 }
 
 function Bag({ open, onClose, carrinho, onRemoverDoCarrinho }: CarrinhoProps) {
-
-  const [produtoParaDeletar, setProdutoParaDeletar] = useState<Produto | null>(
+  const [indiceParaDeletar, setIndiceParaDeletar] = useState<number | null>(
     null,
   );
 
   const handleConfirmarRemocao = () => {
-    if (produtoParaDeletar) {
-      onRemoverDoCarrinho(produtoParaDeletar);
-      setProdutoParaDeletar(null);
+    if (indiceParaDeletar !== null) {
+      onRemoverDoCarrinho(indiceParaDeletar);
+      setIndiceParaDeletar(null);
     }
   };
 
@@ -56,7 +56,7 @@ function Bag({ open, onClose, carrinho, onRemoverDoCarrinho }: CarrinhoProps) {
         slotProps={{
           paper: {
             sx: {
-              width: { xs: "100%", sm: 380 },
+              width: { lg: "20%", xs: "90%", sm: 380, height: "90%" },
               bgcolor: "#121315",
               color: "white",
               p: 3,
@@ -98,7 +98,7 @@ function Bag({ open, onClose, carrinho, onRemoverDoCarrinho }: CarrinhoProps) {
                       <IconButton
                         edge="end"
                         aria-label="remover"
-                        onClick={() => setProdutoParaDeletar(item)}
+                        onClick={() => setIndiceParaDeletar(index)}
                         sx={{ color: "#ff5252" }}
                       >
                         <DeleteOutlineIcon />
@@ -116,7 +116,13 @@ function Bag({ open, onClose, carrinho, onRemoverDoCarrinho }: CarrinhoProps) {
                     <ListItemText
                       primary={
                         <Typography variant="subtitle2" noWrap>
-                          Produto #{item.id}
+                          Produto #
+                          {
+                            (item.id =
+                              item.id && item.legenda
+                                ? (item.id = item.id + 1)
+                                : item.id)
+                          }
                         </Typography>
                       }
                       secondary={
@@ -164,10 +170,9 @@ function Bag({ open, onClose, carrinho, onRemoverDoCarrinho }: CarrinhoProps) {
         )}
       </Drawer>
 
-      {/* Modal/Pop-up de Confirmação */}
       <Dialog
-        open={Boolean(produtoParaDeletar)}
-        onClose={() => setProdutoParaDeletar(null)}
+        open={indiceParaDeletar !== null}
+        onClose={() => setIndiceParaDeletar(null)}
         slotProps={{
           paper: {
             sx: {
@@ -187,7 +192,7 @@ function Bag({ open, onClose, carrinho, onRemoverDoCarrinho }: CarrinhoProps) {
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
           <Button
-            onClick={() => setProdutoParaDeletar(null)}
+            onClick={() => setIndiceParaDeletar(null)}
             sx={{ color: "white", opacity: 0.8 }}
           >
             Cancelar

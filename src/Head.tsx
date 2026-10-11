@@ -167,7 +167,7 @@ function Head({
               <Typography
                 variant="body1"
                 sx={{
-                  color: "rgba(255, 255, 255, 0.6)",
+                  color: "white",
                   fontSize: "1rem",
                   lineHeight: 1.6,
                   maxWidth: "420px",

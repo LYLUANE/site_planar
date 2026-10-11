@@ -59,10 +59,18 @@ interface GLBViewerProps {
 
 export default function GLBViewer({ url }: GLBViewerProps) {
   return (
-    <div style={{ width: "100%", height: "500px", position: "relative" }}>
+    <div
+      style={{
+        width: "100%",
+        height: "500px",
+        position: "relative",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <Canvas
         camera={{ position: [0, 2, 5], fov: 50 }}
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "50%", height: "100%", borderColor: "2px solid red" }}
       >
         <ambientLight intensity={1.5} />
         <directionalLight position={[10, 10, 5]} intensity={1.5} />
