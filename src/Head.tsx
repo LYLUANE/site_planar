@@ -14,6 +14,7 @@ import Bag from "./Bag";
 import type { Produto } from "./Major";
 import ScrollReveal from "./Scroll";
 import GLBViewer from "./three";
+
 interface HeadProps {
   carrinho: Produto[];
   carrinhoAberto: boolean;
@@ -31,11 +32,11 @@ function Head({
 }: HeadProps) {
   return (
     <Box
+      id="inicio"
       sx={{
         bgcolor: "#121315",
         minHeight: "auto",
         color: "#ffffff",
-        id: "inicio",
       }}
     >
       <ScrollReveal direction="up">
@@ -66,35 +67,47 @@ function Head({
               </Typography>
 
               <Box sx={{ display: { xs: "none", md: "flex" }, gap: 4 }}>
+                {/* Direciona para a animação da mesa (Início) */}
                 <Button
+                  component="a"
+                  href="#inicio"
                   color="inherit"
                   sx={{
                     textTransform: "uppercase",
                     fontSize: "0.75rem",
                     letterSpacing: 2,
                     opacity: 0.8,
+                    textDecoration: "none",
                   }}
                 >
                   Estrutura
                 </Button>
+                {/* Direciona para o catálogo de produtos */}
                 <Button
+                  component="a"
+                  href="#produtos"
                   color="inherit"
                   sx={{
                     textTransform: "uppercase",
                     fontSize: "0.75rem",
                     letterSpacing: 2,
                     opacity: 0.8,
+                    textDecoration: "none",
                   }}
                 >
                   Catálogo
                 </Button>
+                {/* Direciona para o Footer (Contato) */}
                 <Button
+                  component="a"
+                  href="#contato"
                   color="inherit"
                   sx={{
                     textTransform: "uppercase",
                     fontSize: "0.75rem",
                     letterSpacing: 2,
                     opacity: 0.8,
+                    textDecoration: "none",
                   }}
                 >
                   Contato
@@ -162,23 +175,14 @@ function Head({
               >
                 Móveis Industriais de aço e madeira. Cada parafuso, cada tubo,
                 cada tampo — visíveis. Arraste o controle e veja como a Mesa
-                Industrial é feita. Use o scroll para ampliar o holograma! 
+                Industrial é feita. Use o scroll para ampliar o holograma!
               </Typography>
             </Grid>
           </Grid>
         </Container>
       </ScrollReveal>
 
-      <Box
-        // sx={{
-        //   width: "auto",
-        //   height: "500px",
-      
-        //   position: "relative",
-        //   mt: 4,
-        // }}
-      />
-      <GLBViewer url="src\assets\produtos\mesa-reta-holograma.glb" />
+      <GLBViewer url="src/assets/produtos/mesa-reta-holograma.glb" />
     </Box>
   );
 }
