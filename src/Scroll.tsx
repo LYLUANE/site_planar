@@ -10,6 +10,13 @@ interface ScrollRevealProps extends BoxProps {
   duration?: number;
 }
 
+const OFFSETS = {
+  up: { y: 40, x: 0 },
+  down: { y: -40, x: 0 },
+  left: { x: 40, y: 0 },
+  right: { x: -40, y: 0 },
+};
+
 function ScrollReveal({
   children,
   direction = "up",
@@ -17,19 +24,12 @@ function ScrollReveal({
   duration = 0.6,
   ...rest
 }: ScrollRevealProps) {
-  const offsets = {
-    up: { y: 40, x: 0 },
-    down: { y: -40, x: 0 },
-    left: { x: 40, y: 0 },
-    right: { x: -40, y: 0 },
-  };
-
   return (
     <Box
       component={motion.div}
       initial={{
         opacity: 0,
-        ...offsets[direction],
+        ...OFFSETS[direction],
       }}
       whileInView={{
         opacity: 1,

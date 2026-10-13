@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { Fragment, useState } from "react";
 import {
   Box,
   Drawer,
@@ -16,35 +16,49 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Stack,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutlineOutlined";
-
-export interface Produto {
-  id: number;
-  nome: string;
-  legenda: string;
-  preco:Number
-}
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import type { ItemCarrinho, Produto } from "./types";
+import { CORES } from "./theme";
+import { calcularTotal, formatarPreco, linkPedidoWhatsApp } from "./utils";
 
 interface CarrinhoProps {
   open: boolean;
   onClose: () => void;
-  carrinho: Produto[];
-  onRemoverDoCarrinho: (produtoRemover: Produto) => void;
+  carrinho: ItemCarrinho[];
+  onAlterarQuantidade: (produto: Produto, quantidade: number) => void;
+  onRemoverDoCarrinho: (produto: Produto) => void;
 }
 
-function Bag({ open, onClose, carrinho, onRemoverDoCarrinho }: CarrinhoProps) {
-
+function Bag({
+  open,
+  onClose,
+  carrinho,
+  onAlterarQuantidade,
+  onRemoverDoCarrinho,
+}: CarrinhoProps) {
   const [produtoParaDeletar, setProdutoParaDeletar] = useState<Produto | null>(
     null,
   );
+
+  const totalItens = carrinho.reduce((soma, item) => soma + item.quantidade, 0);
 
   const handleConfirmarRemocao = () => {
     if (produtoParaDeletar) {
       onRemoverDoCarrinho(produtoParaDeletar);
       setProdutoParaDeletar(null);
     }
+  };
+
+  const diminuir = ({ produto, quantidade }: ItemCarrinho) => {
+    // Chegar a zero pelo "−" também pede confirmação
+    if (quantidade <= 1) setProdutoParaDeletar(produto);
+    else onAlterarQuantidade(produto, quantidade - 1);
   };
 
   return (
@@ -56,8 +70,9 @@ function Bag({ open, onClose, carrinho, onRemoverDoCarrinho }: CarrinhoProps) {
         slotProps={{
           paper: {
             sx: {
-              width: { xs: "100%", sm: 380 },
-              bgcolor: "#121315",
+              width: { xs: "100%", sm: 400 },
+              bgcolor: "background.default",
+              backgroundImage: "none",
               color: "white",
               p: 3,
             },
@@ -72,13 +87,17 @@ function Bag({ open, onClose, carrinho, onRemoverDoCarrinho }: CarrinhoProps) {
             pb: 2,
           }}
         >
-          <Typography variant="h6">Seu Carrinho ({carrinho.length})</Typography>
-          <IconButton onClick={onClose} sx={{ color: "white" }}>
+          <Typography variant="h6">Seu Carrinho ({totalItens})</Typography>
+          <IconButton
+            onClick={onClose}
+            aria-label="fechar carrinho"
+            sx={{ color: "white" }}
+          >
             <CloseIcon />
           </IconButton>
         </Box>
 
-        <Divider sx={{ borderColor: "#333", mb: 2 }} />
+        <Divider sx={{ borderColor: CORES.borda, mb: 2 }} />
 
         <Box sx={{ flexGrow: 1, overflowY: "auto" }}>
           {carrinho.length === 0 ? (
@@ -90,72 +109,115 @@ function Bag({ open, onClose, carrinho, onRemoverDoCarrinho }: CarrinhoProps) {
             </Typography>
           ) : (
             <List disablePadding>
-              {carrinho.map((item, index) => (
-                <React.Fragment key={`${item.id}-${index}`}>
-                  <ListItem
-                    disableGutters
-                    secondaryAction={
-                      <IconButton
-                        edge="end"
-                        aria-label="remover"
-                        onClick={() => setProdutoParaDeletar(item)}
-                        sx={{ color: "#ff5252" }}
-                      >
-                        <DeleteOutlineIcon />
-                      </IconButton>
-                    }
-                  >
-                    <ListItemAvatar>
-                      <Avatar
-                        src={item.nome}
-                        alt={item.legenda}
-                        variant="rounded"
-                        sx={{ width: 56, height: 56, mr: 1 }}
-                      />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={
-                        <Typography variant="subtitle2" noWrap>
-                          Produto #{item.id}
-                        </Typography>
-                      }
-                      secondary={
-                        <Typography
-                          variant="caption"
-                          sx={{
-                            color: "gray",
-                            display: "-webkit-box",
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: "vertical",
-                            overflow: "hidden",
-                          }}
+              {carrinho.map((item) => {
+                const { produto, quantidade } = item;
+                return (
+                  <Fragment key={produto.id}>
+                    <ListItem
+                      disableGutters
+                      alignItems="flex-start"
+                      secondaryAction={
+                        <IconButton
+                          edge="end"
+                          aria-label={`remover ${produto.nome}`}
+                          onClick={() => setProdutoParaDeletar(produto)}
+                          sx={{ color: "#ff5252" }}
                         >
-                          {item.legenda}
-                        </Typography>
+                          <DeleteOutlineIcon />
+                        </IconButton>
                       }
-                    />
-                  </ListItem>
-                  <Divider sx={{ borderColor: "#2a2a2a", my: 1 }} />
-                </React.Fragment>
-              ))}
+                    >
+                      <ListItemAvatar>
+                        <Avatar
+                          src={produto.imagem}
+                          alt={produto.nome}
+                          variant="rounded"
+                          sx={{ width: 56, height: 56, mr: 1 }}
+                        />
+                      </ListItemAvatar>
+                      <ListItemText
+                        disableTypography
+                        primary={
+                          <Typography variant="subtitle2" noWrap>
+                            {produto.nome}
+                          </Typography>
+                        }
+                        secondary={
+                          <>
+                            <Typography
+                              variant="caption"
+                              component="div"
+                              sx={{ color: "primary.main" }}
+                            >
+                              {formatarPreco(produto.preco)}
+                            </Typography>
+                            <Stack
+                              direction="row"
+                              sx={{ alignItems: "center", mt: 0.5 }}
+                            >
+                              <IconButton
+                                size="small"
+                                aria-label={`diminuir quantidade de ${produto.nome}`}
+                                onClick={() => diminuir(item)}
+                                sx={{ color: "white" }}
+                              >
+                                <RemoveIcon fontSize="small" />
+                              </IconButton>
+                              <Typography
+                                variant="body2"
+                                aria-live="polite"
+                                sx={{ minWidth: 24, textAlign: "center" }}
+                              >
+                                {quantidade}
+                              </Typography>
+                              <IconButton
+                                size="small"
+                                aria-label={`aumentar quantidade de ${produto.nome}`}
+                                onClick={() =>
+                                  onAlterarQuantidade(produto, quantidade + 1)
+                                }
+                                sx={{ color: "white" }}
+                              >
+                                <AddIcon fontSize="small" />
+                              </IconButton>
+                            </Stack>
+                          </>
+                        }
+                      />
+                    </ListItem>
+                    <Divider sx={{ borderColor: CORES.borda, my: 1 }} />
+                  </Fragment>
+                );
+              })}
             </List>
           )}
         </Box>
 
         {carrinho.length > 0 && (
-          <Box sx={{ pt: 2, borderTop: "1px solid #333" }}>
+          <Box sx={{ pt: 2, borderTop: `1px solid ${CORES.borda}` }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                mb: 2,
+              }}
+            >
+              <Typography variant="subtitle1">Total</Typography>
+              <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                {formatarPreco(calcularTotal(carrinho))}
+              </Typography>
+            </Box>
             <Button
               variant="contained"
               fullWidth
+              startIcon={<WhatsAppIcon />}
+              href={linkPedidoWhatsApp(carrinho)}
+              target="_blank"
+              rel="noopener noreferrer"
               sx={{
-                bgcolor: "#c4a482",
-                color: "#000",
                 py: 1.5,
                 fontWeight: "bold",
                 borderRadius: 0,
-                "&:hover": {
-                  bgcolor: "#b39371",
-                },
               }}
             >
               Finalizar Pedido
@@ -172,9 +234,9 @@ function Bag({ open, onClose, carrinho, onRemoverDoCarrinho }: CarrinhoProps) {
           paper: {
             sx: {
               width: { xs: "100%", sm: 380 },
-              bgcolor: "#121315",
+              bgcolor: "background.default",
+              backgroundImage: "none",
               color: "white",
-              p: 3,
             },
           },
         }}
@@ -182,7 +244,8 @@ function Bag({ open, onClose, carrinho, onRemoverDoCarrinho }: CarrinhoProps) {
         <DialogTitle sx={{ fontWeight: 700 }}>Remover produto?</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ color: "rgba(255, 255, 255, 0.7)" }}>
-            Tem certeza de que deseja remover este produto do carrinho?
+            Tem certeza de que deseja remover{" "}
+            <strong>{produtoParaDeletar?.nome}</strong> do carrinho?
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>

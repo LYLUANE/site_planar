@@ -1,146 +1,22 @@
-import {
-  AppBar,
-  Badge,
-  Box,
-  Button,
-  Container,
-  Grid,
-  IconButton,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import Bag from "./Bag";
-import type { Produto } from "./Major";
+import { lazy, Suspense } from "react";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import ScrollReveal from "./Scroll";
-import GLBViewer from "./three";
 
-interface HeadProps {
-  carrinho: Produto[];
-  carrinhoAberto: boolean;
-  onOpenCarrinho: () => void;
-  onCloseCarrinho: () => void;
-  onRemoverDoCarrinho: (produto: Produto) => void;
-}
+const MODELO_MESA = "/models/mesa-reta-holograma.glb";
 
-function Head({
-  carrinho,
-  carrinhoAberto,
-  onOpenCarrinho,
-  onCloseCarrinho,
-  onRemoverDoCarrinho,
-}: HeadProps) {
+// three.js é pesado: fica num chunk separado para o resto da página aparecer antes
+const GLBViewer = lazy(() => import("./three"));
+const ALTURA_VIEWER = { xs: 360, md: 500 };
+
+function Head() {
   return (
     <Box
       id="inicio"
       sx={{
-        bgcolor: "#121315",
-        minHeight: "auto",
+        bgcolor: "background.default",
         color: "#ffffff",
       }}
     >
-      <ScrollReveal direction="up">
-        <AppBar
-          position="static"
-          elevation={0}
-          sx={{
-            bgcolor: "transparent",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
-          }}
-        >
-          <Container maxWidth="xl">
-            <Toolbar
-              disableGutters
-              sx={{ justifyContent: "space-between", py: 1 }}
-            >
-              <Typography
-                variant="body2"
-                sx={{ letterSpacing: 3, fontWeight: 700, color: "#e0e0e0" }}
-              >
-                <Box
-                  component="span"
-                  sx={{ opacity: 0.5, fontSize: "0.75rem", mr: 0.5 }}
-                >
-                  PLR •
-                </Box>{" "}
-                PLANAR
-              </Typography>
-
-              <Box sx={{ display: { xs: "none", md: "flex" }, gap: 4 }}>
-                {/* Direciona para a animação da mesa (Início) */}
-                <Button
-                  component="a"
-                  href="#inicio"
-                  color="inherit"
-                  sx={{
-                    textTransform: "uppercase",
-                    fontSize: "0.75rem",
-                    letterSpacing: 2,
-                    opacity: 0.8,
-                    textDecoration: "none",
-                  }}
-                >
-                  Estrutura
-                </Button>
-                {/* Direciona para o catálogo de produtos */}
-                <Button
-                  component="a"
-                  href="#produtos"
-                  color="inherit"
-                  sx={{
-                    textTransform: "uppercase",
-                    fontSize: "0.75rem",
-                    letterSpacing: 2,
-                    opacity: 0.8,
-                    textDecoration: "none",
-                  }}
-                >
-                  Catálogo
-                </Button>
-                {/* Direciona para o Footer (Contato) */}
-                <Button
-                  component="a"
-                  href="#contato"
-                  color="inherit"
-                  sx={{
-                    textTransform: "uppercase",
-                    fontSize: "0.75rem",
-                    letterSpacing: 2,
-                    opacity: 0.8,
-                    textDecoration: "none",
-                  }}
-                >
-                  Contato
-                </Button>
-              </Box>
-
-              <Box>
-                <IconButton
-                  color="inherit"
-                  onClick={onOpenCarrinho}
-                  aria-label="carrinho de compras"
-                  sx={{
-                    border: "1px solid rgba(255, 255, 255, 0.2)",
-                    borderRadius: 0,
-                    p: 1,
-                  }}
-                >
-                  <Badge badgeContent={carrinho.length} color="primary">
-                    <ShoppingCartIcon sx={{ color: "white" }} />
-                  </Badge>
-                </IconButton>
-
-                <Bag
-                  carrinho={carrinho}
-                  open={carrinhoAberto}
-                  onClose={onCloseCarrinho}
-                  onRemoverDoCarrinho={onRemoverDoCarrinho}
-                />
-              </Box>
-            </Toolbar>
-          </Container>
-        </AppBar>
-      </ScrollReveal>
       <ScrollReveal direction="down">
         <Container maxWidth="xl" sx={{ pt: { xs: 4, md: 8 }, pb: 4 }}>
           <Grid container spacing={4} sx={{ alignItems: "flex-end" }}>
@@ -157,7 +33,7 @@ function Head({
               >
                 Honestidade
                 <br />
-                <Box component="span" sx={{ color: "#c4a482" }}>
+                <Box component="span" sx={{ color: "primary.main" }}>
                   estrutural.
                 </Box>
               </Typography>
@@ -174,15 +50,17 @@ function Head({
                 }}
               >
                 Móveis Industriais de aço e madeira. Cada parafuso, cada tubo,
-                cada tampo — visíveis. Arraste o controle e veja como a Mesa
-                Industrial é feita. Use o scroll para ampliar o holograma!
+                cada tampo — visíveis. Arraste para girar a Mesa Industrial e
+                veja como ela é feita. Use o scroll para ampliar o holograma!
               </Typography>
             </Grid>
           </Grid>
         </Container>
       </ScrollReveal>
 
-      <GLBViewer url="src/assets/produtos/mesa-reta-holograma.glb" />
+      <Suspense fallback={<Box sx={{ height: ALTURA_VIEWER }} />}>
+        <GLBViewer url={MODELO_MESA} height={ALTURA_VIEWER} />
+      </Suspense>
     </Box>
   );
 }

@@ -1,6 +1,6 @@
-import React from "react";
 import { Typography, Box } from "@mui/material";
 import { keyframes } from "@mui/system";
+import { CORES } from "./theme";
 
 const mov = keyframes`
   0% {
@@ -20,24 +20,22 @@ const ITEMS: string[] = [
   "PARAFUSOS OCULTOS",
 ];
 
-interface MovBannerProps {
-  Speed?: number;
-  PauseOnHover?: boolean;
+// Lista duplicada para o loop ficar contínuo (anima até -50%)
+const DOUBLE_ITEMS = [...ITEMS, ...ITEMS];
+
+interface SignboardProps {
+  speed?: number;
+  pauseOnHover?: boolean;
 }
 
-export const Signboard: React.FC<MovBannerProps> = ({
-  Speed = 25,
-  PauseOnHover = true,
-}) => {
-  const doubleItems = [...ITEMS, ...ITEMS];
-
+function Signboard({ speed = 25, pauseOnHover = true }: SignboardProps) {
   return (
     <Box
       sx={{
         width: "100%",
         overflow: "hidden",
-        backgroundColor: "#121212",
-        color: "#c4a482",
+        backgroundColor: CORES.fundoFaixa,
+        color: CORES.dourado,
         py: 1.5,
         borderTop: "1px solid rgba(255, 255, 255, 0.1)",
         borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
@@ -48,15 +46,16 @@ export const Signboard: React.FC<MovBannerProps> = ({
       <Box
         sx={{
           display: "inline-flex",
-          animation: `${mov} ${Speed}s linear infinite`,
+          animation: `${mov} ${speed}s linear infinite`,
           "&:hover": {
-            animationPlayState: PauseOnHover ? "paused" : "running",
+            animationPlayState: pauseOnHover ? "paused" : "running",
           },
         }}
       >
-        {doubleItems.map((text, index) => (
+        {DOUBLE_ITEMS.map((text, index) => (
           <Box
             key={`${text}-${index}`}
+            aria-hidden={index >= ITEMS.length}
             sx={{
               display: "inline-flex",
               alignItems: "center",
@@ -76,6 +75,7 @@ export const Signboard: React.FC<MovBannerProps> = ({
             </Typography>
             <Typography
               component="span"
+              aria-hidden
               sx={{
                 fontSize: "1.2rem",
                 opacity: 0.6,
@@ -88,6 +88,6 @@ export const Signboard: React.FC<MovBannerProps> = ({
       </Box>
     </Box>
   );
-};
+}
 
 export default Signboard;
