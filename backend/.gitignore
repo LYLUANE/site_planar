@@ -1,0 +1,9 @@
+node_modules
+dist
+coverage
+.env
+*.log
+# Dados gerados em tempo de execução (barra inicial = só na raiz do backend,
+# para não ignorar também o código em src/uploads/)
+/data/
+/uploads/

@@ -1,75 +1,57 @@
-# React + TypeScript + Vite
+# PLANAR — Móveis Industriais
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Loja com catálogo, carrinho com **medidas personalizadas**, pedido via WhatsApp e
+**painel administrativo** para cadastrar produtos e preços.
 
 ```
+landing-page-3d/
+├── frontend/   React + Vite + MUI + three.js
+├── backend/    NestJS + SQLite  (detalhes em backend/README.md)
+└── .github/    deploy do frontend no GitHub Pages
+```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+## Rodando localmente
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+# 1. Backend
+cd backend
+npm install
+cp .env.example .env     # preencha JWT_SECRET, ADMIN_LOGIN e ADMIN_SENHA
+npm run start:dev        # http://localhost:3000/api
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# 2. Frontend (em outro terminal)
+cd frontend
+npm install
+npm run dev              # http://localhost:5173/site_planar/
+```
+
+O frontend usa `VITE_API_URL` (já definido em `frontend/.env.development` como
+`http://localhost:3000`).
+
+## Rotas do site
+
+| Rota      | O que é                                                    |
+|-----------|------------------------------------------------------------|
+| `/`       | Loja: catálogo vindo da API, carrinho, pedido no WhatsApp  |
+| `/login`  | Login do administrador (JWT)                               |
+| `/admin`  | Cadastro, edição e remoção de produtos (só admin)          |
+
+## Organização do frontend
 
 ```
+frontend/src/
+├── api/          chamadas HTTP (cliente com token, produtos, auth, sessão)
+├── hooks/        useProdutos, useSalvarProduto, useRemoverProduto,
+│                 useAuth (contexto de login), useCarrinho
+├── pages/        Login e Admin (carregadas sob demanda)
+├── components/   MedidasDialog, RotaAdmin, admin/ProdutoFormDialog
+└── *.tsx         seções da loja (Header, Head, Major, Bag, Footer…)
+```
+
+## Deploy (GitHub Pages)
+
+O workflow `.github/workflows/deploy.yml` publica a cada push na `develop`.
+Para a loja funcionar online, o backend precisa estar hospedado e o endereço
+dele configurado em **Settings › Secrets and variables › Actions › Variables**
+como `VITE_API_URL`. Inclua também `https://lyluane.github.io` no
+`FRONTEND_URL` do `.env` do backend.
