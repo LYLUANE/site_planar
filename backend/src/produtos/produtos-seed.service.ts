@@ -7,7 +7,6 @@ import { VariaveisAmbiente } from '../config/env.validation';
 import { UploadsService } from '../uploads/uploads.service';
 import { Produto } from './produto.entity';
 
-// Catálogo que estava fixo no frontend. Só é cadastrado se o banco estiver vazio.
 const PRODUTOS_INICIAIS: Omit<Produto, 'id' | 'criadoEm' | 'atualizadoEm'>[] = [
   {
     nome: 'Criado-mudo',

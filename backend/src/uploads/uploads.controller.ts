@@ -13,7 +13,6 @@ import { TAMANHO_MAXIMO_IMAGEM, UploadsService } from './uploads.service';
 export class UploadsController {
   constructor(private readonly uploads: UploadsService) {}
 
-  // Recebe a foto do produto (campo "arquivo" do form-data). Só admin.
   @Papeis('admin')
   @Post('imagens')
   @UseInterceptors(

@@ -15,9 +15,9 @@ import ScrollReveal from "./Scroll";
 import { CORES } from "./theme";
 
 const LINKS_MENU = [
-  { label: "Estrutura", href: "#inicio" }, // animação da mesa
+  { label: "Estrutura", href: "#inicio" },
   { label: "Catálogo", href: "#produtos" },
-  { label: "Contato", href: "#contato" }, // footer
+  { label: "Contato", href: "#contato" },
 ];
 
 interface HeaderProps {
@@ -36,8 +36,6 @@ function Header({
   const { totalItens } = carrinho;
 
   return (
-    // sticky precisa ficar direto no topo da página: dentro de outro Box ele
-    // só "gruda" enquanto o pai estiver visível
     <AppBar
       position="sticky"
       elevation={0}

@@ -12,8 +12,6 @@ import {
   validateSync,
 } from 'class-validator';
 
-// Variáveis lidas do .env. A aplicação NÃO sobe se alguma obrigatória estiver
-// faltando ou fraca — melhor falhar no boot do que rodar inseguro.
 export class VariaveisAmbiente {
   @IsOptional()
   @Transform(({ value }) => Number(value))
@@ -22,7 +20,6 @@ export class VariaveisAmbiente {
   @Max(65535)
   PORT: number = 3000;
 
-  // Origens que podem chamar a API (separadas por vírgula)
   @IsString()
   FRONTEND_URL: string = 'http://localhost:5173';
 
@@ -37,7 +34,6 @@ export class VariaveisAmbiente {
   })
   JWT_EXPIRA_EM: string = '1h';
 
-  // Login e senha do administrador, escolhidos pelo dono do site
   @IsString()
   @Matches(/^[a-zA-Z0-9._@-]{3,50}$/, {
     message:
@@ -65,7 +61,6 @@ export class VariaveisAmbiente {
   @IsString()
   UPLOADS_DIR: string = 'uploads';
 
-  // Cadastra os 6 produtos iniciais quando o banco está vazio
   @IsOptional()
   @Transform(({ value }) => value !== 'false' && value !== false)
   SEED_PRODUTOS: boolean = true;

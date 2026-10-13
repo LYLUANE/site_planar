@@ -27,7 +27,6 @@ const DICAS = ehToque
       },
     ];
 
-/** Legenda de como manipular o modelo 3D */
 function GuiaControles() {
   return (
     <Box
@@ -50,7 +49,6 @@ function GuiaControles() {
         {DICAS.map(({ Icone, acao, efeito }) => (
           <Stack
             key={acao}
-            // celular: ícone em cima do texto; telas maiores: lado a lado
             direction={{ xs: "column", sm: "row" }}
             sx={{
               alignItems: "center",

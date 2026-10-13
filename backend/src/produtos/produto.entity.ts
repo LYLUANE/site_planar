@@ -17,11 +17,9 @@ export class Produto {
   @Column({ length: 500 })
   descricao!: string;
 
-  // Preço em centavos (inteiro): evita erros de arredondamento de float
   @Column({ name: 'preco_centavos', type: 'integer' })
   precoCentavos!: number;
 
-  // Medidas padrão em centímetros; o cliente pode personalizar no carrinho
   @Column({ type: 'integer' })
   largura!: number;
 
@@ -31,7 +29,6 @@ export class Produto {
   @Column({ type: 'integer' })
   altura!: number;
 
-  // Só o nome do arquivo dentro da pasta de uploads
   @Column({ length: 100 })
   imagem!: string;
 
@@ -42,7 +39,6 @@ export class Produto {
   atualizadoEm!: Date;
 }
 
-// Formato enviado ao frontend (não expõe colunas internas)
 export function paraProdutoResposta(p: Produto) {
   return {
     id: p.id,

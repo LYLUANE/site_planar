@@ -33,8 +33,6 @@ const paraValores = (m: Medidas): Valores => ({
   altura: String(m.altura),
 });
 
-// O mínimo nunca passa da medida padrão do próprio produto: um móvel
-// cadastrado com 5 cm precisa poder ir para o carrinho com 5 cm
 function erroDoCampo(valor: string, chave: keyof Medidas, padrao: Medidas) {
   const n = Number(valor);
   if (!/^\d+$/.test(valor)) return "Use um número inteiro";
@@ -45,13 +43,11 @@ function erroDoCampo(valor: string, chave: keyof Medidas, padrao: Medidas) {
 }
 
 interface MedidasDialogProps {
-  /** Produto sendo adicionado; null fecha o diálogo */
   produto: Produto | null;
   onClose: () => void;
   onConfirmar: (produto: Produto, medidas: Medidas, quantidade: number) => void;
 }
 
-/** Wrapper que remonta o formulário a cada produto (estado sempre limpo). */
 function MedidasDialog({ produto, onClose, onConfirmar }: MedidasDialogProps) {
   return (
     <Dialog

@@ -13,12 +13,10 @@ import type { ResponsiveStyleValue } from "@mui/system";
 import * as THREE from "three";
 import { CORES } from "./theme";
 
-// Direção da câmera na vista inicial (de frente, levemente de cima)
 const DIRECAO_INICIAL = new THREE.Vector3(0, 2, 5).normalize();
 
-// Limites de zoom relativos ao tamanho em que o modelo abre
-const ZOOM_MAX = 0.6; // aproxima até 60% da distância inicial
-const ZOOM_MIN = 1.5; // afasta até 150%
+const ZOOM_MAX = 0.6;
+const ZOOM_MIN = 1.5;
 
 function Model({ url }: { url: string }) {
   const { scene } = useGLTF(url);
@@ -42,7 +40,6 @@ function Model({ url }: { url: string }) {
   );
 }
 
-/** Duplo clique/toque volta para a vista inicial */
 function RecentralizarNoDuploClique() {
   const bounds = useBounds();
   const gl = useThree((s) => s.gl);
@@ -73,7 +70,6 @@ function Cena({
   onEnquadrar: (distancia: number) => void;
 }) {
   return (
-    // Enquadra o modelo no tamanho do quadro ao abrir (e ao redimensionar)
     <Bounds
       fit
       clip
@@ -88,8 +84,6 @@ function Cena({
   );
 }
 
-// Fica fora do <Canvas> (overlay comum): o <Html> do drei dentro do Suspense
-// gerava erro de desmontagem no React 19 quando o modelo terminava de carregar
 function Carregando() {
   const { active, progress } = useProgress();
   if (!active) return null;
@@ -126,7 +120,6 @@ export default function GLBViewer({
   url,
   height = { xs: 260, md: 300 },
 }: GLBViewerProps) {
-  // distância em que o modelo foi enquadrado: base para os limites de zoom
   const [distancia, setDistancia] = useState<number | null>(null);
 
   return (
@@ -135,8 +128,6 @@ export default function GLBViewer({
         width: "100%",
         height,
         position: "relative",
-        // No celular: deslizar na vertical rola a página, na horizontal gira
-        // a mesa (o OrbitControls define "none" inline, por isso o !important)
         "& canvas": { touchAction: "pan-y !important" },
       }}
     >
@@ -158,7 +149,6 @@ export default function GLBViewer({
           enablePan={false}
           minDistance={distancia ? distancia * ZOOM_MAX : 0}
           maxDistance={distancia ? distancia * ZOOM_MIN : Infinity}
-          // não deixa girar para baixo do tampo nem ficar exatamente por cima
           minPolarAngle={Math.PI * 0.15}
           maxPolarAngle={Math.PI * 0.5}
         />

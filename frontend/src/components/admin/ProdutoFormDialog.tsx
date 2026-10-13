@@ -19,7 +19,6 @@ import { useSalvarProduto } from "../../hooks/useProdutos";
 import type { Medidas, Produto } from "../../types";
 import { reaisParaCentavos } from "../../utils";
 
-// Mesmos limites do backend (o backend valida de novo de qualquer forma)
 const MEDIDA_MAX = 500;
 const TAMANHO_MAX_FOTO = 2 * 1024 * 1024;
 const TIPOS_FOTO = ["image/jpeg", "image/png", "image/webp"];
@@ -81,7 +80,6 @@ function validar(v: Valores, temFoto: boolean) {
 
 interface ProdutoFormDialogProps {
   aberto: boolean;
-  /** Produto em edição; null = novo produto */
   produto: Produto | null;
   onClose: () => void;
 }
@@ -151,7 +149,6 @@ function Formulario({
     }
     setErroArquivo(null);
     setArquivo(escolhido);
-    // prévia local da foto, antes de enviar
     const leitor = new FileReader();
     leitor.onload = () => setPrevia(leitor.result as string);
     leitor.readAsDataURL(escolhido);

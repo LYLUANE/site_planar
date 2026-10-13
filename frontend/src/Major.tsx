@@ -175,7 +175,6 @@ function Major({ onAdicionarAoCarrinho }: MajorProps) {
     <Box
       id="produtos"
       component="section"
-      // mesmo fundo areia do rodapé
       sx={{ width: "100%", px: 2, py: { xs: 4, md: 6 }, bgcolor: CORES.areia }}
     >
       <Typography

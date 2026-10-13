@@ -37,7 +37,6 @@ export class JwtAuthGuard implements CanActivate {
 
     let payload: PayloadJwt;
     try {
-      // algoritmo fixo: rejeita tokens "alg: none" ou com outro algoritmo
       payload = await this.jwt.verifyAsync<PayloadJwt>(token, {
         algorithms: ['HS256'],
       });
@@ -45,8 +44,6 @@ export class JwtAuthGuard implements CanActivate {
       throw new UnauthorizedException('Sessão inválida ou expirada');
     }
 
-    // Busca o usuário no banco a cada requisição: se ele for removido ou
-    // perder o papel de admin, o token antigo deixa de valer na hora.
     const usuario = await this.usuarios.buscarPorId(Number(payload.sub));
     if (!usuario)
       throw new UnauthorizedException('Sessão inválida ou expirada');

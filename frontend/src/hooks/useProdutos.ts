@@ -10,7 +10,6 @@ import {
 
 const CHAVE_PRODUTOS = ["produtos"] as const;
 
-/** Lista de produtos (com cache: várias telas usam sem refazer a chamada). */
 export function useProdutos() {
   return useQuery({
     queryKey: CHAVE_PRODUTOS,
@@ -22,11 +21,9 @@ export function useProdutos() {
 interface SalvarProduto {
   id?: number;
   dados: Omit<DadosProduto, "imagem"> & { imagem?: string };
-  /** Foto nova escolhida no formulário (enviada antes de salvar) */
   arquivo?: File | null;
 }
 
-/** Cria ou edita um produto, enviando a foto antes quando houver uma nova. */
 export function useSalvarProduto() {
   const queryClient = useQueryClient();
   return useMutation({

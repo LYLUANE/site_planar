@@ -4,8 +4,6 @@ export const TELEFONE = "(14) 99665-1162";
 export const EMAIL = "planar_moveis@gmail.com";
 const WHATSAPP = "5514996651162";
 
-/** Limites (cm) que o cliente pode escolher ao personalizar um produto.
- * Profundidade sem mínimo prático (só precisa ser ≥ 1 cm): há móveis bem rasos. */
 export const LIMITES_MEDIDA: Record<
   keyof Medidas,
   { min: number; max: number }
@@ -24,7 +22,6 @@ export function formatarPreco(centavos: number) {
   return brl.format(centavos / 100);
 }
 
-/** Converte "1.890,50", "1890,5" ou "1890.50" em centavos; null se inválido */
 export function reaisParaCentavos(texto: string): number | null {
   const limpo = texto.trim().replace(/^R\$\s*/, "");
   if (!/^\d{1,3}(\.\d{3})*(,\d{1,2})?$|^\d+([.,]\d{1,2})?$/.test(limpo)) {

@@ -19,7 +19,6 @@ import type { UsuarioPublico } from "../types";
 
 interface AuthContexto {
   usuario: UsuarioPublico | null;
-  /** true enquanto confere no backend se o token salvo ainda vale */
   verificando: boolean;
   ehAdmin: boolean;
   entrar: (login: string, senha: string) => Promise<void>;
@@ -34,7 +33,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const queryClient = useQueryClient();
   const [sessao, setSessao] = useState<Sessao | null>(lerSessao);
 
-  // O cliente HTTP dispara este evento quando a API responde 401
   useEffect(() => {
     const aoExpirar = () => setSessao(null);
     window.addEventListener("planar:sessao-expirada", aoExpirar);
@@ -42,7 +40,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       window.removeEventListener("planar:sessao-expirada", aoExpirar);
   }, []);
 
-  // Não confia cegamente no que está no storage: confirma com o backend
   const { data: usuarioConfirmado, isPending } = useQuery({
     queryKey: ["auth", "me", sessao?.token],
     queryFn: buscarUsuarioAtual,

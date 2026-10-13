@@ -6,14 +6,10 @@ import { existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { VariaveisAmbiente } from '../config/env.validation';
 
-// Nome de arquivo aceito em qualquer lugar da API: sem barras nem "..",
-// impossível sair da pasta de uploads (path traversal)
 export const REGEX_NOME_IMAGEM = /^[a-z0-9-]{1,64}\.(jpe?g|png|webp)$/;
 
-export const TAMANHO_MAXIMO_IMAGEM = 2 * 1024 * 1024; // 2 MB
+export const TAMANHO_MAXIMO_IMAGEM = 2 * 1024 * 1024;
 
-// Identifica o tipo pelos primeiros bytes do arquivo (assinatura), e não pelo
-// nome ou pelo Content-Type que o navegador mandou — esses podem ser forjados
 function detectarExtensao(buffer: Buffer): 'jpg' | 'png' | 'webp' | null {
   if (buffer.length < 12) return null;
   if (buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) {

@@ -19,12 +19,10 @@ import { ApiError } from "../api/cliente";
 import { useAuth } from "../hooks/useAuth";
 import { CORES } from "../theme";
 
-// Mesmas regras do backend, para avisar antes de enviar
 const REGEX_LOGIN = /^[a-zA-Z0-9._@-]{3,50}$/;
 
 function mensagemDeErro(erro: Error) {
   if (erro instanceof ApiError) {
-    // 400 (formato inválido) e 401 viram a mesma mensagem: não revela o motivo
     if (erro.status === 400 || erro.status === 401) {
       return "Login ou senha incorretos.";
     }
@@ -60,9 +58,7 @@ function Login() {
       await entrar(login, senha);
       setSenha("");
       navigate("/admin", { replace: true });
-    } catch {
-      // erro exibido pelo erroLogin
-    }
+    } catch {}
   };
 
   return (

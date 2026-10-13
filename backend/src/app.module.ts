@@ -24,8 +24,6 @@ import { UsuariosModule } from './usuarios/usuarios.module';
       ): TypeOrmModuleOptions => {
         const base = {
           autoLoadEntities: true,
-          // Cria/atualiza as tabelas a partir das entidades. Simples para começar;
-          // num banco de produção com dados importantes, troque por migrations.
           synchronize: true,
         };
 
@@ -45,7 +43,6 @@ import { UsuariosModule } from './usuarios/usuarios.module';
       },
     }),
 
-    // Limite geral: 100 requisições por minuto por IP
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }]),
 
     AuthModule,
@@ -54,8 +51,6 @@ import { UsuariosModule } from './usuarios/usuarios.module';
     UploadsModule,
   ],
   providers: [
-    // Ordem importa: limita taxa → exige token → confere papel.
-    // Toda rota é protegida por padrão; as públicas usam @Publico().
     { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: PapeisGuard },

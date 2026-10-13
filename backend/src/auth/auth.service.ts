@@ -7,8 +7,6 @@ import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
-  // Hash "falso" usado quando o login não existe, para a resposta demorar o
-  // mesmo tempo e não revelar quais logins estão cadastrados
   private readonly hashFalso = gerarHashSenha('senha-que-nunca-confere');
 
   constructor(
@@ -24,11 +22,9 @@ export class AuthService {
     );
 
     if (!usuario || !senhaOk) {
-      // mesma mensagem para login e senha errados
       throw new UnauthorizedException('Login ou senha incorretos');
     }
 
-    // O token carrega só o id; papel e dados são lidos do banco a cada requisição
     const accessToken = await this.jwt.signAsync({ sub: usuario.id });
     return { accessToken, usuario: paraUsuarioPublico(usuario) };
   }

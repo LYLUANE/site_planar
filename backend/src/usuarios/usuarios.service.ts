@@ -4,8 +4,6 @@ import { Repository } from 'typeorm';
 import { gerarHashSenha } from './senha';
 import { Papel, Usuario } from './usuario.entity';
 
-// Todas as consultas passam pelo Repository do TypeORM, que usa parâmetros
-// (prepared statements) — não há SQL montado com concatenação de texto.
 @Injectable()
 export class UsuariosService {
   constructor(
@@ -17,7 +15,6 @@ export class UsuariosService {
     return this.usuarios.findOneBy({ id });
   }
 
-  // Única consulta que traz o hash, usada só no login
   buscarComSenha(login: string) {
     return this.usuarios
       .createQueryBuilder('u')
