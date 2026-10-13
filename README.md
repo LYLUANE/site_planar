@@ -3,8 +3,12 @@
 Loja com catálogo, carrinho com **medidas personalizadas**, pedido via WhatsApp e
 **painel administrativo** para cadastrar produtos e preços.
 
-- **Frontend:** React + Vite + MUI + three.js (esta pasta)
-- **Backend:** NestJS + SQLite (pasta [`backend/`](backend/README.md))
+```
+landing-page-3d/
+├── frontend/   React + Vite + MUI + three.js
+├── backend/    NestJS + SQLite  (detalhes em backend/README.md)
+└── .github/    deploy do frontend no GitHub Pages
+```
 
 ## Rodando localmente
 
@@ -15,12 +19,13 @@ npm install
 cp .env.example .env     # preencha JWT_SECRET, ADMIN_LOGIN e ADMIN_SENHA
 npm run start:dev        # http://localhost:3000/api
 
-# 2. Frontend (em outro terminal, na raiz)
+# 2. Frontend (em outro terminal)
+cd frontend
 npm install
 npm run dev              # http://localhost:5173/site_planar/
 ```
 
-O frontend usa `VITE_API_URL` (já definido em `.env.development` como
+O frontend usa `VITE_API_URL` (já definido em `frontend/.env.development` como
 `http://localhost:3000`).
 
 ## Rotas do site
@@ -34,7 +39,7 @@ O frontend usa `VITE_API_URL` (já definido em `.env.development` como
 ## Organização do frontend
 
 ```
-src/
+frontend/src/
 ├── api/          chamadas HTTP (cliente com token, produtos, auth, sessão)
 ├── hooks/        useProdutos, useSalvarProduto, useRemoverProduto,
 │                 useAuth (contexto de login), useCarrinho
