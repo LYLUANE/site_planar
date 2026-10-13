@@ -59,7 +59,6 @@ function Bag({ open, onClose, carrinho: carrinhoHook }: CarrinhoProps) {
   };
 
   const diminuir = (item: ItemCarrinho) => {
-    // Chegar a zero pelo "−" também pede confirmação
     if (item.quantidade <= 1) setItemParaDeletar(item);
     else alterarQuantidade(item.chave, item.quantidade - 1);
   };
@@ -245,7 +244,6 @@ function Bag({ open, onClose, carrinho: carrinhoHook }: CarrinhoProps) {
         )}
       </Drawer>
 
-      {/* Modal/Pop-up de Confirmação */}
       <Dialog
         open={Boolean(itemParaDeletar)}
         onClose={() => setItemParaDeletar(null)}

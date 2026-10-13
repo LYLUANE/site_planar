@@ -1,7 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 
 export const CORES = {
-  // Grafite quente: mais suave que o preto, combina com o dourado e o areia
   fundo: "#2b2926",
   fundoHeader: "rgba(43, 41, 38, 0.85)",
   fundoFaixa: "#36332f",
@@ -33,7 +32,6 @@ const theme = createTheme({
       styleOverrides: {
         html: {
           scrollBehavior: "smooth",
-          // espaço do header fixo, para os links #produtos/#contato não ficarem escondidos
           scrollPaddingTop: 72,
         },
       },

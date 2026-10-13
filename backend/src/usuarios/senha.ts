@@ -5,8 +5,6 @@ import {
   timingSafeEqual,
 } from 'node:crypto';
 
-// Hash de senha com scrypt (nativo do Node). Formato salvo no banco:
-// scrypt$N$r$p$salt$hash — os parâmetros ficam junto para permitir ajustá-los no futuro.
 const PARAMS = { N: 16384, r: 8, p: 1 };
 const TAMANHO_CHAVE = 64;
 
@@ -49,7 +47,6 @@ export async function conferirSenha(
     r: Number(r),
     p: Number(p),
   });
-  // comparação em tempo constante: não vaza quantos bytes bateram
   return (
     calculado.length === esperado.length && timingSafeEqual(calculado, esperado)
   );

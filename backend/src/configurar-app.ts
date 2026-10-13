@@ -6,7 +6,6 @@ import type { ServerResponse } from 'node:http';
 import { resolve } from 'node:path';
 import { VariaveisAmbiente } from './config/env.validation';
 
-// Configuração compartilhada entre o main.ts e os testes e2e
 export function configurarApp(app: NestExpressApplication) {
   const config = app.get(ConfigService<VariaveisAmbiente, true>);
 
@@ -27,20 +26,18 @@ export function configurarApp(app: NestExpressApplication) {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // remove campos que não estão no DTO
-      forbidNonWhitelisted: true, // ...e rejeita a requisição se vier algum
+      whitelist: true,
+      forbidNonWhitelisted: true,
       transform: true,
     }),
   );
 
-  // Imagens dos produtos: só leitura, sem listagem de diretório
   app.useStaticAssets(resolve(config.get('UPLOADS_DIR', { infer: true })), {
     prefix: '/uploads/',
     index: false,
     dotfiles: 'deny',
     setHeaders: (res: ServerResponse) => {
       res.setHeader('X-Content-Type-Options', 'nosniff');
-      // o front roda em outra origem e precisa exibir as imagens
       res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
       res.setHeader('Cache-Control', 'public, max-age=86400');
     },

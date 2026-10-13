@@ -22,7 +22,6 @@ const MENSAGENS_PADRAO: Record<number, string> = {
   429: "Muitas tentativas. Aguarde um minuto e tente de novo.",
 };
 
-// Mensagem do backend pode vir como string ou lista (erros de validação)
 function extrairMensagem(status: number, corpo: unknown): string {
   const mensagem = (corpo as { message?: unknown } | null)?.message;
   if (typeof mensagem === "string") return mensagem;
@@ -38,7 +37,6 @@ interface Opcoes {
   autenticado?: boolean;
 }
 
-/** Faz a chamada à API e devolve o JSON já tipado (ou lança ApiError). */
 export async function requisicao<T>(
   caminho: string,
   { metodo = "GET", corpo, autenticado = false }: Opcoes = {},
@@ -71,7 +69,6 @@ export async function requisicao<T>(
 
   const dados: unknown = await resposta.json().catch(() => null);
   if (!resposta.ok) {
-    // token vencido/inválido: encerra a sessão para o app mandar ao login
     if (resposta.status === 401 && sessao) limparSessao();
     throw new ApiError(
       resposta.status,

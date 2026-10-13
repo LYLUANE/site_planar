@@ -6,13 +6,11 @@ import type { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
 import { configurarApp } from '../src/configurar-app';
 
-// process.env é preenchido em test/setup-env.ts
 const ADMIN = {
   login: process.env.ADMIN_LOGIN!,
   senha: process.env.ADMIN_SENHA!,
 };
 
-// PNG 1x1 válido
 const PNG = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
   'base64',

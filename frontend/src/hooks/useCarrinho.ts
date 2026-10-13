@@ -4,8 +4,6 @@ import { useProdutos } from "./useProdutos";
 
 const STORAGE_KEY = "planar:carrinho:v2";
 
-// No navegador fica só id + medidas + quantidade; nome, foto e preço vêm
-// sempre da API, então nunca ficam desatualizados (nem podem ser forjados)
 interface LinhaCarrinho {
   produtoId: number;
   medidas: Medidas;
@@ -45,12 +43,9 @@ export function useCarrinho() {
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(linhas));
-    } catch {
-      // localStorage indisponível (modo privado, etc.) — segue sem persistir
-    }
+    } catch {}
   }, [linhas]);
 
-  // Junta cada linha com o produto atual da API; produtos removidos somem
   const itens = useMemo<ItemCarrinho[]>(() => {
     if (!produtos) return [];
     const porId = new Map(produtos.map((p) => [p.id, p]));

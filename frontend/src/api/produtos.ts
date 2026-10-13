@@ -1,7 +1,6 @@
 import type { Medidas, Produto } from "../types";
 import { API_URL, requisicao } from "./cliente";
 
-// Formato que vem do backend (imagemUrl é relativa à API)
 interface ProdutoApi extends Omit<Produto, "imagemUrl"> {
   imagemUrl: string;
 }
@@ -51,7 +50,6 @@ export function removerProduto(id: number) {
   });
 }
 
-/** Envia a foto e devolve o nome do arquivo para usar em `imagem`. */
 export async function enviarImagem(arquivo: File) {
   const form = new FormData();
   form.append("arquivo", arquivo);

@@ -4,8 +4,6 @@ import { VariaveisAmbiente } from '../config/env.validation';
 import { conferirSenha } from './senha';
 import { UsuariosService } from './usuarios.service';
 
-// Garante que o admin definido no .env exista ao subir a API.
-// Se a ADMIN_SENHA do .env mudar, a senha no banco é atualizada no próximo boot.
 @Injectable()
 export class AdminSeedService implements OnApplicationBootstrap {
   private readonly logger = new Logger(AdminSeedService.name);

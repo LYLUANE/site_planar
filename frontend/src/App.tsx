@@ -4,7 +4,6 @@ import { Box, CircularProgress } from "@mui/material";
 import Home from "./Home";
 import RotaAdmin from "./components/RotaAdmin";
 
-// Login e painel ficam em chunks separados: quem só visita a loja não baixa
 const Login = lazy(() => import("./pages/Login"));
 const Admin = lazy(() => import("./pages/Admin"));
 

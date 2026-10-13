@@ -1,7 +1,5 @@
 import type { UsuarioPublico } from "../types";
 
-// Sessão do admin no sessionStorage: some ao fechar a aba e não é
-// compartilhada entre abas. O token expira em 1h no backend de qualquer forma.
 const CHAVE = "planar:sessao";
 
 export interface Sessao {
@@ -21,16 +19,12 @@ export function lerSessao(): Sessao | null {
 export function salvarSessao(sessao: Sessao) {
   try {
     sessionStorage.setItem(CHAVE, JSON.stringify(sessao));
-  } catch {
-    // armazenamento indisponível: a sessão vale só enquanto a página estiver aberta
-  }
+  } catch {}
 }
 
 export function limparSessao() {
   try {
     sessionStorage.removeItem(CHAVE);
-  } catch {
-    // ignora
-  }
+  } catch {}
   window.dispatchEvent(new Event("planar:sessao-expirada"));
 }

@@ -9,7 +9,6 @@ import { LoginDto } from './dto/login.dto';
 export class AuthController {
   constructor(private readonly auth: AuthService) {}
 
-  // Máximo de 5 tentativas por minuto por IP, contra força bruta
   @Publico()
   @Throttle({ default: { limit: 5, ttl: 60_000 } })
   @Post('login')

@@ -20,7 +20,6 @@ const ITEMS: string[] = [
   "PARAFUSOS OCULTOS",
 ];
 
-// Lista duplicada para o loop ficar contínuo (anima até -50%)
 const DOUBLE_ITEMS = [...ITEMS, ...ITEMS];
 
 interface SignboardProps {

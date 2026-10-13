@@ -10,7 +10,6 @@ import { Link as RouterLink } from "react-router";
 import { CORES } from "./theme";
 import { EMAIL, TELEFONE } from "./utils";
 
-// Texto escuro sobre o fundo areia: contraste ~8:1 (o branco ficava ~1,9:1)
 const COR_TEXTO = CORES.fundo;
 
 const linkSx = { color: COR_TEXTO, fontSize: "0.875rem" };

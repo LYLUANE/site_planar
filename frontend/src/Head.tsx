@@ -5,12 +5,9 @@ import ScrollReveal from "./Scroll";
 
 const MODELO_MESA = `${import.meta.env.BASE_URL}models/mesa-reta-holograma.glb`;
 
-// three.js é pesado: fica num chunk separado para o resto da página aparecer antes
 const GLBViewer = lazy(() => import("./three"));
 const ALTURA_VIEWER = { xs: 260, md: 300 };
 
-// A mesa ocupa a mesma largura do parágrafo ao lado do título; o resto da
-// largura fica livre para rolar a página sem o scroll virar zoom
 const LARGURA_COLUNA = 420;
 
 function Head() {

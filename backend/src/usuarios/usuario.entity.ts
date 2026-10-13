@@ -15,7 +15,6 @@ export class Usuario {
   @Column({ length: 50, unique: true })
   login!: string;
 
-  // select: false → o hash nunca sai do banco por acidente num find() comum
   @Column({ name: 'senha_hash', length: 255, select: false })
   senhaHash!: string;
 
@@ -26,7 +25,6 @@ export class Usuario {
   criadoEm!: Date;
 }
 
-// Formato público do usuário: é o que pode ir no JWT e nas respostas da API
 export interface UsuarioPublico {
   id: number;
   login: string;
