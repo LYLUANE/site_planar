@@ -2,7 +2,7 @@ import { lazy, Suspense } from "react";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import ScrollReveal from "./Scroll";
 
-const MODELO_MESA = "/models/mesa-reta-holograma.glb";
+const MODELO_MESA = `${import.meta.env.BASE_URL}models/mesa-reta-holograma.glb`;
 
 // three.js é pesado: fica num chunk separado para o resto da página aparecer antes
 const GLBViewer = lazy(() => import("./three"));
