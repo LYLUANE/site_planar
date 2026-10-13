@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ItemCarrinho, Medidas, Produto } from "../types";
+import { ignorarErro } from "../utils";
 import { useProdutos } from "./useProdutos";
 
 const STORAGE_KEY = "planar:carrinho:v2";
@@ -41,9 +42,9 @@ export function useCarrinho() {
   const [linhas, setLinhas] = useState<LinhaCarrinho[]>(carregar);
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(linhas));
-    } catch {}
+    ignorarErro(() =>
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(linhas)),
+    );
   }, [linhas]);
 
   const itens = useMemo<ItemCarrinho[]>(() => {

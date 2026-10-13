@@ -15,7 +15,7 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { ApiError } from "../api/cliente";
+import { ApiError, CREDENCIAIS_DEMO, MODO_DEMO } from "../api/cliente";
 import { useAuth } from "../hooks/useAuth";
 import { CORES } from "../theme";
 
@@ -58,7 +58,9 @@ function Login() {
       await entrar(login, senha);
       setSenha("");
       navigate("/admin", { replace: true });
-    } catch {}
+    } catch {
+      return;
+    }
   };
 
   return (
@@ -94,6 +96,28 @@ function Login() {
             PLANAR Móveis
           </Typography>
         </Box>
+
+        {MODO_DEMO && (
+          <Alert
+            severity="info"
+            sx={{ mb: 2 }}
+            action={
+              <Button
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setLogin(CREDENCIAIS_DEMO.login);
+                  setSenha(CREDENCIAIS_DEMO.senha);
+                }}
+              >
+                Preencher
+              </Button>
+            }
+          >
+            Demonstração — login <strong>{CREDENCIAIS_DEMO.login}</strong>,
+            senha <strong>{CREDENCIAIS_DEMO.senha}</strong>
+          </Alert>
+        )}
 
         {erroLogin && (
           <Alert severity="error" sx={{ mb: 2 }}>

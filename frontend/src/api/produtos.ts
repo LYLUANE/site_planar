@@ -14,7 +14,9 @@ export interface DadosProduto extends Medidas {
 
 const normalizar = (p: ProdutoApi): Produto => ({
   ...p,
-  imagemUrl: `${API_URL}${p.imagemUrl}`,
+  imagemUrl: p.imagemUrl.startsWith("/uploads/")
+    ? `${API_URL}${p.imagemUrl}`
+    : p.imagemUrl,
 });
 
 export async function listarProdutos() {

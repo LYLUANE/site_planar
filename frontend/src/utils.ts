@@ -13,6 +13,14 @@ export const LIMITES_MEDIDA: Record<
   altura: { min: 10, max: 500 },
 };
 
+export function ignorarErro(acao: () => void) {
+  try {
+    acao();
+  } catch {
+    return;
+  }
+}
+
 const brl = new Intl.NumberFormat("pt-BR", {
   style: "currency",
   currency: "BRL",

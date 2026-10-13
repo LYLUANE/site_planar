@@ -34,6 +34,8 @@ jobs:
           # Endereço do backend em produção: configure em
           # Settings › Secrets and variables › Actions › Variables
           VITE_API_URL: ${{ vars.VITE_API_URL }}
+          # Sem backend configurado, o site publicado roda em modo demonstração
+          VITE_MODO_DEMO: ${{ vars.VITE_API_URL == '' && 'true' || 'false' }}
       # O Pages não conhece as rotas do React (/login, /admin): o 404.html
       # devolve o próprio app, que resolve a rota no navegador
       - run: cp dist/index.html dist/404.html
