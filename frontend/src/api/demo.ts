@@ -1,3 +1,4 @@
+import aparador from "../assets/produtos/aparador.jpeg";
 import criadoMudo from "../assets/produtos/criado_mudo.jpeg";
 import escada from "../assets/produtos/escada.jpeg";
 import estante from "../assets/produtos/estante.jpeg";
@@ -15,7 +16,7 @@ const USUARIO_DEMO: UsuarioPublico = {
   login: LOGIN_DEMO,
   papel: "admin",
 };
-const CHAVE = "planar:demo:v1";
+const CHAVE = "planar:demo:v2";
 const LADO_MAXIMO_FOTO = 900;
 
 interface ProdutoDemo {
@@ -40,6 +41,7 @@ const FOTOS_INICIAIS: Record<string, string> = {
   "moldura.jpeg": moldura,
   "estante.jpeg": estante,
   "mesa-industrial.jpeg": mesaIndustrial,
+  "aparador.jpeg": aparador,
 };
 
 const PRODUTOS_INICIAIS: ProdutoDemo[] = [
@@ -96,6 +98,15 @@ const PRODUTOS_INICIAIS: ProdutoDemo[] = [
     precoCentavos: 189000,
     medidas: { largura: 160, profundidade: 78, altura: 80 },
     imagem: "mesa-industrial.jpeg",
+  },
+  {
+    id: 7,
+    nome: "Aparador",
+    descricao:
+      "Aparador de churrasqueira, perfeito para colocar os espetos e a grelha apoiados.",
+    precoCentavos: 25000,
+    medidas: { largura: 72, profundidade: 5, altura: 35 },
+    imagem: "aparador.jpeg",
   },
 ];
 
