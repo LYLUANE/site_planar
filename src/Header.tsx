@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Bag from "./Bag";
-import type { ItemCarrinho, Produto } from "./types";
+import type { Carrinho } from "./hooks/useCarrinho";
 import ScrollReveal from "./Scroll";
 import { CORES } from "./theme";
 
@@ -21,12 +21,10 @@ const LINKS_MENU = [
 ];
 
 interface HeaderProps {
-  carrinho: ItemCarrinho[];
+  carrinho: Carrinho;
   carrinhoAberto: boolean;
   onOpenCarrinho: () => void;
   onCloseCarrinho: () => void;
-  onAlterarQuantidade: (produto: Produto, quantidade: number) => void;
-  onRemoverDoCarrinho: (produto: Produto) => void;
 }
 
 function Header({
@@ -34,10 +32,8 @@ function Header({
   carrinhoAberto,
   onOpenCarrinho,
   onCloseCarrinho,
-  onAlterarQuantidade,
-  onRemoverDoCarrinho,
 }: HeaderProps) {
-  const totalItens = carrinho.reduce((soma, item) => soma + item.quantidade, 0);
+  const { totalItens } = carrinho;
 
   return (
     // sticky precisa ficar direto no topo da página: dentro de outro Box ele
@@ -116,8 +112,6 @@ function Header({
         carrinho={carrinho}
         open={carrinhoAberto}
         onClose={onCloseCarrinho}
-        onAlterarQuantidade={onAlterarQuantidade}
-        onRemoverDoCarrinho={onRemoverDoCarrinho}
       />
     </AppBar>
   );

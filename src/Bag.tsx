@@ -23,42 +23,45 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-import type { ItemCarrinho, Produto } from "./types";
+import type { Carrinho } from "./hooks/useCarrinho";
+import type { ItemCarrinho } from "./types";
 import { CORES } from "./theme";
-import { calcularTotal, formatarPreco, linkPedidoWhatsApp } from "./utils";
+import {
+  calcularTotal,
+  formatarMedidas,
+  formatarPreco,
+  linkPedidoWhatsApp,
+  medidasIguais,
+} from "./utils";
 
 interface CarrinhoProps {
   open: boolean;
   onClose: () => void;
-  carrinho: ItemCarrinho[];
-  onAlterarQuantidade: (produto: Produto, quantidade: number) => void;
-  onRemoverDoCarrinho: (produto: Produto) => void;
+  carrinho: Carrinho;
 }
 
-function Bag({
-  open,
-  onClose,
-  carrinho,
-  onAlterarQuantidade,
-  onRemoverDoCarrinho,
-}: CarrinhoProps) {
-  const [produtoParaDeletar, setProdutoParaDeletar] = useState<Produto | null>(
+function Bag({ open, onClose, carrinho: carrinhoHook }: CarrinhoProps) {
+  const {
+    itens: carrinho,
+    totalItens,
+    alterarQuantidade,
+    remover,
+  } = carrinhoHook;
+  const [itemParaDeletar, setItemParaDeletar] = useState<ItemCarrinho | null>(
     null,
   );
 
-  const totalItens = carrinho.reduce((soma, item) => soma + item.quantidade, 0);
-
   const handleConfirmarRemocao = () => {
-    if (produtoParaDeletar) {
-      onRemoverDoCarrinho(produtoParaDeletar);
-      setProdutoParaDeletar(null);
+    if (itemParaDeletar) {
+      remover(itemParaDeletar.chave);
+      setItemParaDeletar(null);
     }
   };
 
-  const diminuir = ({ produto, quantidade }: ItemCarrinho) => {
+  const diminuir = (item: ItemCarrinho) => {
     // Chegar a zero pelo "−" também pede confirmação
-    if (quantidade <= 1) setProdutoParaDeletar(produto);
-    else onAlterarQuantidade(produto, quantidade - 1);
+    if (item.quantidade <= 1) setItemParaDeletar(item);
+    else alterarQuantidade(item.chave, item.quantidade - 1);
   };
 
   return (
@@ -110,9 +113,10 @@ function Bag({
           ) : (
             <List disablePadding>
               {carrinho.map((item) => {
-                const { produto, quantidade } = item;
+                const { produto, medidas, quantidade } = item;
+                const personalizado = !medidasIguais(medidas, produto.medidas);
                 return (
-                  <Fragment key={produto.id}>
+                  <Fragment key={item.chave}>
                     <ListItem
                       disableGutters
                       alignItems="flex-start"
@@ -120,7 +124,7 @@ function Bag({
                         <IconButton
                           edge="end"
                           aria-label={`remover ${produto.nome}`}
-                          onClick={() => setProdutoParaDeletar(produto)}
+                          onClick={() => setItemParaDeletar(item)}
                           sx={{ color: "#ff5252" }}
                         >
                           <DeleteOutlineIcon />
@@ -129,7 +133,7 @@ function Bag({
                     >
                       <ListItemAvatar>
                         <Avatar
-                          src={produto.imagem}
+                          src={produto.imagemUrl}
                           alt={produto.nome}
                           variant="rounded"
                           sx={{ width: 56, height: 56, mr: 1 }}
@@ -147,9 +151,24 @@ function Bag({
                             <Typography
                               variant="caption"
                               component="div"
+                              sx={{ color: "text.secondary" }}
+                            >
+                              {formatarMedidas(medidas)}
+                              {personalizado && (
+                                <Box
+                                  component="span"
+                                  sx={{ color: "primary.main", ml: 0.5 }}
+                                >
+                                  • personalizado
+                                </Box>
+                              )}
+                            </Typography>
+                            <Typography
+                              variant="caption"
+                              component="div"
                               sx={{ color: "primary.main" }}
                             >
-                              {formatarPreco(produto.preco)}
+                              {formatarPreco(produto.precoCentavos)}
                             </Typography>
                             <Stack
                               direction="row"
@@ -174,7 +193,7 @@ function Bag({
                                 size="small"
                                 aria-label={`aumentar quantidade de ${produto.nome}`}
                                 onClick={() =>
-                                  onAlterarQuantidade(produto, quantidade + 1)
+                                  alterarQuantidade(item.chave, quantidade + 1)
                                 }
                                 sx={{ color: "white" }}
                               >
@@ -228,8 +247,8 @@ function Bag({
 
       {/* Modal/Pop-up de Confirmação */}
       <Dialog
-        open={Boolean(produtoParaDeletar)}
-        onClose={() => setProdutoParaDeletar(null)}
+        open={Boolean(itemParaDeletar)}
+        onClose={() => setItemParaDeletar(null)}
         slotProps={{
           paper: {
             sx: {
@@ -245,12 +264,12 @@ function Bag({
         <DialogContent>
           <DialogContentText sx={{ color: "rgba(255, 255, 255, 0.7)" }}>
             Tem certeza de que deseja remover{" "}
-            <strong>{produtoParaDeletar?.nome}</strong> do carrinho?
+            <strong>{itemParaDeletar?.produto.nome}</strong> do carrinho?
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
           <Button
-            onClick={() => setProdutoParaDeletar(null)}
+            onClick={() => setItemParaDeletar(null)}
             sx={{ color: "white", opacity: 0.8 }}
           >
             Cancelar

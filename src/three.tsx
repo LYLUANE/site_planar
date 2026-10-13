@@ -1,13 +1,7 @@
 import { Suspense, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
-import {
-  Center,
-  Html,
-  OrbitControls,
-  useGLTF,
-  useProgress,
-} from "@react-three/drei";
-import { Box } from "@mui/material";
+import { Center, OrbitControls, useGLTF, useProgress } from "@react-three/drei";
+import { Box, LinearProgress, Typography } from "@mui/material";
 import type { ResponsiveStyleValue } from "@mui/system";
 import * as THREE from "three";
 import { CORES } from "./theme";
@@ -34,33 +28,32 @@ function Model({ url }: { url: string }) {
   );
 }
 
-// <Html> renderiza fora da árvore do MUI (sem tema), por isso estilos inline
+// Fica fora do <Canvas> (overlay comum): o <Html> do drei dentro do Suspense
+// gerava erro de desmontagem no React 19 quando o modelo terminava de carregar
 function Carregando() {
-  const { progress } = useProgress();
+  const { active, progress } = useProgress();
+  if (!active) return null;
   return (
-    <Html center>
-      <div
-        style={{
-          width: 200,
-          textAlign: "center",
-          fontFamily: "Roboto, sans-serif",
-        }}
-      >
-        <span style={{ color: CORES.dourado, fontSize: "0.75rem" }}>
+    <Box
+      sx={{
+        position: "absolute",
+        inset: 0,
+        display: "grid",
+        placeItems: "center",
+        pointerEvents: "none",
+      }}
+    >
+      <Box sx={{ width: 200, textAlign: "center" }}>
+        <Typography variant="caption" sx={{ color: "primary.main" }}>
           Carregando holograma… {Math.round(progress)}%
-        </span>
-        <div style={{ marginTop: 8, height: 4, background: CORES.borda }}>
-          <div
-            style={{
-              width: `${progress}%`,
-              height: "100%",
-              background: CORES.dourado,
-              transition: "width 0.2s",
-            }}
-          />
-        </div>
-      </div>
-    </Html>
+        </Typography>
+        <LinearProgress
+          variant="determinate"
+          value={progress}
+          sx={{ mt: 1, bgcolor: CORES.borda }}
+        />
+      </Box>
+    </Box>
   );
 }
 
@@ -82,11 +75,12 @@ export default function GLBViewer({
       >
         <ambientLight intensity={1.5} />
         <directionalLight position={[10, 10, 5]} intensity={1.5} />
-        <Suspense fallback={<Carregando />}>
+        <Suspense fallback={null}>
           <Model url={url} />
         </Suspense>
         <OrbitControls enableZoom minDistance={1.5} maxDistance={10} />
       </Canvas>
+      <Carregando />
     </Box>
   );
 }

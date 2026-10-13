@@ -6,6 +6,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import { Call, LocalPostOffice } from "@mui/icons-material";
+import { Link as RouterLink } from "react-router";
 import { CORES } from "./theme";
 import { EMAIL, TELEFONE } from "./utils";
 
@@ -58,6 +59,14 @@ function Footer() {
               </Link>
               <Link href="#produtos" underline="hover" sx={linkSx}>
                 Produtos
+              </Link>
+              <Link
+                component={RouterLink}
+                to="/login"
+                underline="hover"
+                sx={{ ...linkSx, opacity: 0.7 }}
+              >
+                Área do administrador
               </Link>
             </Stack>
           </Grid>
