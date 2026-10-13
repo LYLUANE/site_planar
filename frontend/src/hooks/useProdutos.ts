@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { MODO_DEMO } from "../api/cliente";
 import {
   atualizarProduto,
   criarProduto,
@@ -34,6 +35,19 @@ export function useSalvarProduto() {
       }
       if (!imagem) throw new Error("Escolha uma foto para o produto.");
       return criarProduto({ ...dados, imagem });
+    },
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: CHAVE_PRODUTOS }),
+  });
+}
+
+export function useRestaurarDemo() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async () => {
+      if (!MODO_DEMO) return;
+      const { restaurarDemo } = await import("../api/demo");
+      restaurarDemo();
     },
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: CHAVE_PRODUTOS }),

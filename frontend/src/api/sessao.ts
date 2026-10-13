@@ -1,4 +1,5 @@
 import type { UsuarioPublico } from "../types";
+import { ignorarErro } from "../utils";
 
 const CHAVE = "planar:sessao";
 
@@ -17,14 +18,10 @@ export function lerSessao(): Sessao | null {
 }
 
 export function salvarSessao(sessao: Sessao) {
-  try {
-    sessionStorage.setItem(CHAVE, JSON.stringify(sessao));
-  } catch {}
+  ignorarErro(() => sessionStorage.setItem(CHAVE, JSON.stringify(sessao)));
 }
 
 export function limparSessao() {
-  try {
-    sessionStorage.removeItem(CHAVE);
-  } catch {}
+  ignorarErro(() => sessionStorage.removeItem(CHAVE));
   window.dispatchEvent(new Event("planar:sessao-expirada"));
 }

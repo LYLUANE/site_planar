@@ -1,7 +1,11 @@
 import { lerSessao, limparSessao } from "./sessao";
 
+export const MODO_DEMO = import.meta.env.VITE_MODO_DEMO === "true";
+
+export const CREDENCIAIS_DEMO = { login: "demo", senha: "planar123" };
+
 export const API_URL = (
-  import.meta.env.VITE_API_URL ?? "http://localhost:3000"
+  import.meta.env.VITE_API_URL || "http://localhost:3000"
 ).replace(/\/$/, "");
 
 export class ApiError extends Error {
@@ -48,6 +52,23 @@ export async function requisicao<T>(
   }
 
   const sessao = autenticado ? lerSessao() : null;
+
+  if (MODO_DEMO) {
+    const { responderDemo } = await import("./demo");
+    try {
+      return await responderDemo<T>(caminho, {
+        metodo,
+        corpo,
+        token: sessao?.token,
+      });
+    } catch (erro) {
+      if (erro instanceof ApiError && erro.status === 401 && sessao) {
+        limparSessao();
+      }
+      throw erro;
+    }
+  }
+
   if (sessao) headers.Authorization = `Bearer ${sessao.token}`;
 
   let resposta: Response;

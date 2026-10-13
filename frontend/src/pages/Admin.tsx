@@ -32,7 +32,12 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import ProdutoFormDialog from "../components/admin/ProdutoFormDialog";
 import { useAuth } from "../hooks/useAuth";
-import { useProdutos, useRemoverProduto } from "../hooks/useProdutos";
+import { MODO_DEMO } from "../api/cliente";
+import {
+  useProdutos,
+  useRemoverProduto,
+  useRestaurarDemo,
+} from "../hooks/useProdutos";
 import { CORES } from "../theme";
 import type { Produto } from "../types";
 import { formatarMedidas, formatarPreco } from "../utils";
@@ -41,6 +46,7 @@ function Admin() {
   const { usuario, sair } = useAuth();
   const { data: produtos, isPending, isError, error } = useProdutos();
   const remover = useRemoverProduto();
+  const restaurar = useRestaurarDemo();
 
   const [formAberto, setFormAberto] = useState(false);
   const [emEdicao, setEmEdicao] = useState<Produto | null>(null);
@@ -116,6 +122,26 @@ function Admin() {
             Novo produto
           </Button>
         </Box>
+
+        {MODO_DEMO && (
+          <Alert
+            severity="info"
+            sx={{ mb: 2 }}
+            action={
+              <Button
+                color="inherit"
+                size="small"
+                disabled={restaurar.isPending}
+                onClick={() => restaurar.mutate()}
+              >
+                Restaurar produtos
+              </Button>
+            }
+          >
+            Modo demonstração: cadastre, edite e remova à vontade. As alterações
+            ficam salvas só neste navegador.
+          </Alert>
+        )}
 
         {isError && <Alert severity="error">{error.message}</Alert>}
         {remover.error && (

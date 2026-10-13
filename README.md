@@ -48,10 +48,24 @@ frontend/src/
 └── *.tsx         seções da loja (Header, Head, Major, Bag, Footer…)
 ```
 
-## Deploy (GitHub Pages)
+## Deploy (GitHub Pages) e modo demonstração
 
-O workflow `.github/workflows/deploy.yml` publica a cada push na `develop`.
-Para a loja funcionar online, o backend precisa estar hospedado e o endereço
-dele configurado em **Settings › Secrets and variables › Actions › Variables**
-como `VITE_API_URL`. Inclua também `https://lyluane.github.io` no
-`FRONTEND_URL` do `.env` do backend.
+O workflow `.github/workflows/deploy.yml` publica o frontend a cada push na `develop`.
+
+Enquanto a variável `VITE_API_URL` não estiver configurada no repositório, o site
+publicado roda em **modo demonstração**: os produtos, o carrinho, o login e o
+painel admin funcionam sem backend, com os dados salvos no navegador de cada
+visitante. Credenciais da demonstração: **demo / planar123** (aparecem na tela de
+login). No painel, "Restaurar produtos" volta ao catálogo original.
+
+Para testar o modo demonstração localmente:
+
+```bash
+cd frontend
+VITE_MODO_DEMO=true npm run dev
+```
+
+Para usar o backend real em produção, hospede a API (pasta `backend/`), cadastre
+o endereço dela em **Settings › Secrets and variables › Actions › Variables**
+como `VITE_API_URL` e inclua `https://lyluane.github.io` no `FRONTEND_URL` do
+backend. O modo demonstração desliga sozinho no próximo deploy.
