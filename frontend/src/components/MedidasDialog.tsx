@@ -15,8 +15,7 @@ import type { Medidas, Produto } from "../types";
 import {
   formatarMedidas,
   formatarPreco,
-  MEDIDA_MAX_CM,
-  MEDIDA_MIN_CM,
+  LIMITES_MEDIDA,
   medidasIguais,
 } from "../utils";
 
@@ -34,12 +33,14 @@ const paraValores = (m: Medidas): Valores => ({
   altura: String(m.altura),
 });
 
-function erroDoCampo(valor: string) {
+// O mínimo nunca passa da medida padrão do próprio produto: um móvel
+// cadastrado com 5 cm precisa poder ir para o carrinho com 5 cm
+function erroDoCampo(valor: string, chave: keyof Medidas, padrao: Medidas) {
   const n = Number(valor);
   if (!/^\d+$/.test(valor)) return "Use um número inteiro";
-  if (n < MEDIDA_MIN_CM || n > MEDIDA_MAX_CM) {
-    return `Entre ${MEDIDA_MIN_CM} e ${MEDIDA_MAX_CM} cm`;
-  }
+  const min = Math.min(LIMITES_MEDIDA[chave].min, padrao[chave]);
+  const max = Math.max(LIMITES_MEDIDA[chave].max, padrao[chave]);
+  if (n < Math.max(min, 1) || n > max) return `Entre ${min} e ${max} cm`;
   return null;
 }
 
@@ -83,9 +84,13 @@ function FormularioMedidas({
   const [quantidade, setQuantidade] = useState("1");
 
   const erros = {
-    largura: erroDoCampo(valores.largura),
-    profundidade: erroDoCampo(valores.profundidade),
-    altura: erroDoCampo(valores.altura),
+    largura: erroDoCampo(valores.largura, "largura", produto.medidas),
+    profundidade: erroDoCampo(
+      valores.profundidade,
+      "profundidade",
+      produto.medidas,
+    ),
+    altura: erroDoCampo(valores.altura, "altura", produto.medidas),
   };
   const erroQuantidade =
     /^\d+$/.test(quantidade) && +quantidade >= 1 && +quantidade <= 99

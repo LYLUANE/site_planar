@@ -4,9 +4,16 @@ export const TELEFONE = "(14) 99665-1162";
 export const EMAIL = "planar_moveis@gmail.com";
 const WHATSAPP = "5514996651162";
 
-/** Limites (cm) que o cliente pode escolher ao personalizar um produto */
-export const MEDIDA_MIN_CM = 10;
-export const MEDIDA_MAX_CM = 500;
+/** Limites (cm) que o cliente pode escolher ao personalizar um produto.
+ * Profundidade sem mínimo prático (só precisa ser ≥ 1 cm): há móveis bem rasos. */
+export const LIMITES_MEDIDA: Record<
+  keyof Medidas,
+  { min: number; max: number }
+> = {
+  largura: { min: 10, max: 500 },
+  profundidade: { min: 1, max: 500 },
+  altura: { min: 10, max: 500 },
+};
 
 const brl = new Intl.NumberFormat("pt-BR", {
   style: "currency",
