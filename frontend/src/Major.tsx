@@ -92,7 +92,7 @@ function Major({ onAdicionarAoCarrinho }: MajorProps) {
 
     if (produtos.length === 0) {
       return (
-        <Typography sx={{ color: "text.secondary" }}>
+        <Typography sx={{ color: CORES.fundo }}>
           Nenhum produto cadastrado ainda.
         </Typography>
       );
@@ -175,14 +175,15 @@ function Major({ onAdicionarAoCarrinho }: MajorProps) {
     <Box
       id="produtos"
       component="section"
-      sx={{ width: "100%", px: 2, py: { xs: 4, md: 6 } }}
+      // mesmo fundo areia do rodapé
+      sx={{ width: "100%", px: 2, py: { xs: 4, md: 6 }, bgcolor: CORES.areia }}
     >
       <Typography
         variant="h5"
         component="h2"
         sx={{
           fontWeight: "bold",
-          color: "white",
+          color: CORES.fundo,
           mb: 3,
           textAlign: "center",
         }}
