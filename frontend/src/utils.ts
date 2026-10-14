@@ -1,4 +1,4 @@
-import type { ItemCarrinho, Medidas, Produto } from "./types";
+import type { ItemCarrinho, Medidas } from "./types";
 
 export const TELEFONE = "(11) 99575-8331";
 export const EMAIL = "planar_moveis@gmail.com";
@@ -19,15 +19,6 @@ export function ignorarErro(acao: () => void) {
   } catch {
     return;
   }
-}
-
-const brl = new Intl.NumberFormat("pt-BR", {
-  style: "currency",
-  currency: "BRL",
-});
-
-export function formatarPreco(centavos: number) {
-  return brl.format(centavos / 100);
 }
 
 export function reaisParaCentavos(texto: string): number | null {
@@ -61,46 +52,6 @@ export function calcularTotal(itens: ItemCarrinho[]) {
   );
 }
 
-export function linkPedidoWhatsApp(itens: ItemCarrinho[]) {
-  const temPersonalizado = itens.some(
-    (item) => !medidasIguais(item.medidas, item.produto.medidas),
-  );
-
-  const linhas = itens.map(({ produto, medidas, quantidade }) => {
-    const personalizado = medidasIguais(medidas, produto.medidas)
-      ? ""
-      : " (medidas personalizadas)";
-    return (
-      `• ${quantidade}x ${produto.nome} — ${formatarMedidas(medidas)}${personalizado}` +
-      ` — ${formatarPreco(produto.precoCentavos * quantidade)}`
-    );
-  });
-
-  const mensagem = [
-    "Olá! Gostaria de fazer o seguinte pedido:",
-    "",
-    ...linhas,
-    "",
-    `Total: ${formatarPreco(calcularTotal(itens))}`,
-    ...(temPersonalizado
-      ? ["", "Sei que o valor pode mudar por causa das medidas personalizadas."]
-      : []),
-  ].join("\n");
-
-  return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(mensagem)}`;
-}
-
-export function linkOrcamentoWhatsApp(
-  produto: Produto,
-  medidas: Medidas,
-  quantidade: number,
-) {
-  const mensagem = [
-    `Olá! Gostaria de um orçamento para ${quantidade}x ${produto.nome} com medidas personalizadas:`,
-    "",
-    `• Medidas desejadas: ${formatarMedidas(medidas)} (L × P × A)`,
-    `• Medidas padrão: ${formatarMedidas(produto.medidas)}`,
-  ].join("\n");
-
+export function linkWhatsApp(mensagem: string) {
   return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(mensagem)}`;
 }

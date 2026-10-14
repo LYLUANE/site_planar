@@ -11,6 +11,7 @@ import {
 import { Box, LinearProgress, Typography } from "@mui/material";
 import type { ResponsiveStyleValue } from "@mui/system";
 import * as THREE from "three";
+import { useIdioma } from "./i18n";
 import { CORES } from "./theme";
 
 const DIRECAO_INICIAL = new THREE.Vector3(0, 2, 5).normalize();
@@ -86,6 +87,7 @@ function Cena({
 
 function Carregando() {
   const { active, progress } = useProgress();
+  const { t } = useIdioma();
   if (!active) return null;
   return (
     <Box
@@ -99,7 +101,7 @@ function Carregando() {
     >
       <Box sx={{ width: 200, textAlign: "center" }}>
         <Typography variant="caption" sx={{ color: "primary.main" }}>
-          Carregando holograma… {Math.round(progress)}%
+          {t.guia.carregando(Math.round(progress))}
         </Typography>
         <LinearProgress
           variant="determinate"

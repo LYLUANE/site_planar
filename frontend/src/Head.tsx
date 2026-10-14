@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import GuiaControles from "./components/GuiaControles";
+import { useIdioma } from "./i18n";
 import ScrollReveal from "./Scroll";
 
 const MODELO_MESA = `${import.meta.env.BASE_URL}models/mesa-reta-holograma.glb`;
@@ -11,6 +12,7 @@ const ALTURA_VIEWER = { xs: 260, md: 300 };
 const LARGURA_COLUNA = 420;
 
 function Head() {
+  const { t } = useIdioma();
   return (
     <Box
       id="inicio"
@@ -33,10 +35,10 @@ function Head() {
                   color: "#f5f5f7",
                 }}
               >
-                Honestidade
+                {t.hero.titulo1}
                 <br />
                 <Box component="span" sx={{ color: "primary.main" }}>
-                  estrutural.
+                  {t.hero.titulo2}
                 </Box>
               </Typography>
             </Grid>
@@ -51,9 +53,7 @@ function Head() {
                   maxWidth: LARGURA_COLUNA,
                 }}
               >
-                Móveis Industriais de aço e madeira. Cada parafuso, cada tubo,
-                cada tampo — visíveis. Gire a Mesa Industrial e veja como ela é
-                feita.
+                {t.hero.texto}
               </Typography>
             </Grid>
           </Grid>

@@ -16,12 +16,13 @@ const USUARIO_DEMO: UsuarioPublico = {
   login: LOGIN_DEMO,
   papel: "admin",
 };
-const CHAVE = "planar:demo:v2";
+const CHAVE = "planar:demo:v3";
 const LADO_MAXIMO_FOTO = 900;
 
 interface ProdutoDemo {
   id: number;
   nome: string;
+  traducoes?: Partial<Record<"en", { nome: string; descricao: string }>>;
   descricao: string;
   precoCentavos: number;
   medidas: Medidas;
@@ -48,6 +49,13 @@ const PRODUTOS_INICIAIS: ProdutoDemo[] = [
   {
     id: 1,
     nome: "Criado-mudo",
+    traducoes: {
+      en: {
+        nome: "Nightstand",
+        descricao:
+          "Nightstand in varnished pine wood with a rectangular steel tubing frame.",
+      },
+    },
     descricao:
       "Criado-mudo em madeira pinus envernizada com estrutura de metalon.",
     precoCentavos: 28000,
@@ -57,6 +65,13 @@ const PRODUTOS_INICIAIS: ProdutoDemo[] = [
   {
     id: 2,
     nome: "Escada Auxiliar",
+    traducoes: {
+      en: {
+        nome: "Step Stool",
+        descricao:
+          "Two-step stool in varnished pine wood with a rectangular steel tubing frame.",
+      },
+    },
     descricao:
       "Escada auxiliar de 2 degraus em madeira pinus envernizada com estrutura de metalon.",
     precoCentavos: 19000,
@@ -66,6 +81,13 @@ const PRODUTOS_INICIAIS: ProdutoDemo[] = [
   {
     id: 3,
     nome: "Mesa de Escritório",
+    traducoes: {
+      en: {
+        nome: "Office Desk",
+        descricao:
+          "Office/study desk in varnished pine wood with a rectangular steel tubing frame.",
+      },
+    },
     descricao:
       "Mesa de escritório/estudo em madeira pinus envernizada com estrutura de metalon.",
     precoCentavos: 58000,
@@ -75,6 +97,13 @@ const PRODUTOS_INICIAIS: ProdutoDemo[] = [
   {
     id: 4,
     nome: "Moldura Decorativa",
+    traducoes: {
+      en: {
+        nome: "Decorative Frame",
+        descricao:
+          "Decorative picture frame with a minimalist rectangular steel tubing structure.",
+      },
+    },
     descricao:
       "Moldura de quadro decorativo com estrutura minimalista em metalon.",
     precoCentavos: 9500,
@@ -84,6 +113,13 @@ const PRODUTOS_INICIAIS: ProdutoDemo[] = [
   {
     id: 5,
     nome: "Estante",
+    traducoes: {
+      en: {
+        nome: "Bookshelf",
+        descricao:
+          "Bookshelf with three 30mm solid wood shelves supported by brushed steel columns.",
+      },
+    },
     descricao:
       "Estante com três planos de madeira maciça de 30mm apoiados em colunas de aço escovado.",
     precoCentavos: 145000,
@@ -93,6 +129,13 @@ const PRODUTOS_INICIAIS: ProdutoDemo[] = [
   {
     id: 6,
     nome: "Mesa Industrial",
+    traducoes: {
+      en: {
+        nome: "Industrial Table",
+        descricao:
+          "Industrial table with a solid wood top on a brushed steel tubular base.",
+      },
+    },
     descricao:
       "Mesa Industrial com tampo maciço sobre base tubular de aço escovado.",
     precoCentavos: 189000,
@@ -102,6 +145,13 @@ const PRODUTOS_INICIAIS: ProdutoDemo[] = [
   {
     id: 7,
     nome: "Aparador",
+    traducoes: {
+      en: {
+        nome: "Grill Rack",
+        descricao:
+          "Barbecue grill rack, perfect for resting the skewers and the grate.",
+      },
+    },
     descricao:
       "Aparador de churrasqueira, perfeito para colocar os espetos e a grelha apoiados.",
     precoCentavos: 25000,
@@ -184,8 +234,12 @@ interface DadosProdutoDemo {
 }
 
 function aplicar(produto: ProdutoDemo, dados: DadosProdutoDemo): ProdutoDemo {
+  const textoMudou =
+    (dados.nome !== undefined && dados.nome !== produto.nome) ||
+    (dados.descricao !== undefined && dados.descricao !== produto.descricao);
   return {
     ...produto,
+    traducoes: textoMudou ? undefined : produto.traducoes,
     nome: dados.nome ?? produto.nome,
     descricao: dados.descricao ?? produto.descricao,
     precoCentavos: dados.precoCentavos ?? produto.precoCentavos,

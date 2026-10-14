@@ -1,5 +1,6 @@
 import { Typography, Box } from "@mui/material";
 import { keyframes } from "@mui/system";
+import { useIdioma } from "./i18n";
 import { CORES } from "./theme";
 
 const mov = keyframes`
@@ -11,23 +12,16 @@ const mov = keyframes`
   }
 `;
 
-const ITEMS: string[] = [
-  "SAPATAS NIVELADORAS",
-  "FEITO SOB MEDIDA",
-  "ENTREGA PARA TODO O BRASIL",
-  "AÇO ESCOVADO",
-  "MADEIRA MACIÇA",
-  "PARAFUSOS OCULTOS",
-];
-
-const DOUBLE_ITEMS = [...ITEMS, ...ITEMS];
-
 interface SignboardProps {
   speed?: number;
   pauseOnHover?: boolean;
 }
 
 function Signboard({ speed = 25, pauseOnHover = true }: SignboardProps) {
+  const { t } = useIdioma();
+  const itens = t.letreiro;
+  const itensDuplicados = [...itens, ...itens];
+
   return (
     <Box
       sx={{
@@ -51,10 +45,10 @@ function Signboard({ speed = 25, pauseOnHover = true }: SignboardProps) {
           },
         }}
       >
-        {DOUBLE_ITEMS.map((text, index) => (
+        {itensDuplicados.map((text, index) => (
           <Box
             key={`${text}-${index}`}
-            aria-hidden={index >= ITEMS.length}
+            aria-hidden={index >= itens.length}
             sx={{
               display: "inline-flex",
               alignItems: "center",

@@ -12,6 +12,7 @@ export interface Produto {
   medidas: Medidas;
   imagem: string;
   imagemUrl: string;
+  traducoes?: Partial<Record<"en", { nome: string; descricao: string }>>;
 }
 
 export interface ItemCarrinho {

@@ -9,6 +9,7 @@ import "@fontsource/roboto/700.css";
 
 import App from "./App.tsx";
 import { AuthProvider } from "./hooks/useAuth";
+import { IdiomaProvider } from "./i18n";
 import theme from "./theme";
 
 const queryClient = new QueryClient({
@@ -23,9 +24,11 @@ createRoot(document.getElementById("root")!).render(
       <BrowserRouter basename={import.meta.env.BASE_URL}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <AuthProvider>
-            <App />
-          </AuthProvider>
+          <IdiomaProvider>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </IdiomaProvider>
         </ThemeProvider>
       </BrowserRouter>
     </QueryClientProvider>

@@ -10,15 +10,11 @@ import {
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Bag from "./Bag";
+import SeletorIdioma from "./components/SeletorIdioma";
 import type { Carrinho } from "./hooks/useCarrinho";
+import { useIdioma } from "./i18n";
 import ScrollReveal from "./Scroll";
 import { CORES } from "./theme";
-
-const LINKS_MENU = [
-  { label: "Estrutura", href: "#inicio" },
-  { label: "Catálogo", href: "#produtos" },
-  { label: "Contato", href: "#contato" },
-];
 
 interface HeaderProps {
   carrinho: Carrinho;
@@ -34,6 +30,12 @@ function Header({
   onCloseCarrinho,
 }: HeaderProps) {
   const { totalItens } = carrinho;
+  const { t } = useIdioma();
+  const linksMenu = [
+    { label: t.header.estrutura, href: "#inicio" },
+    { label: t.header.catalogo, href: "#produtos" },
+    { label: t.header.contato, href: "#contato" },
+  ];
 
   return (
     <AppBar
@@ -70,7 +72,7 @@ function Header({
               component="nav"
               sx={{ display: { xs: "none", md: "flex" }, gap: 4 }}
             >
-              {LINKS_MENU.map(({ label, href }) => (
+              {linksMenu.map(({ label, href }) => (
                 <Button
                   key={href}
                   component="a"
@@ -88,20 +90,23 @@ function Header({
               ))}
             </Box>
 
-            <IconButton
-              color="inherit"
-              onClick={onOpenCarrinho}
-              aria-label={`carrinho de compras, ${totalItens} itens`}
-              sx={{
-                border: "1px solid rgba(255, 255, 255, 0.2)",
-                borderRadius: 0,
-                p: 1,
-              }}
-            >
-              <Badge badgeContent={totalItens} color="primary">
-                <ShoppingCartIcon sx={{ color: "white" }} />
-              </Badge>
-            </IconButton>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+              <SeletorIdioma />
+              <IconButton
+                color="inherit"
+                onClick={onOpenCarrinho}
+                aria-label={t.header.carrinhoAria(totalItens)}
+                sx={{
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  borderRadius: 0,
+                  p: 1,
+                }}
+              >
+                <Badge badgeContent={totalItens} color="primary">
+                  <ShoppingCartIcon sx={{ color: "white" }} />
+                </Badge>
+              </IconButton>
+            </Box>
           </Toolbar>
         </Container>
       </ScrollReveal>

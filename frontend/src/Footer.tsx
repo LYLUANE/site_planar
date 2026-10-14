@@ -8,6 +8,7 @@ import Divider from "@mui/material/Divider";
 import { Call, LocalPostOffice } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router";
 import { CORES } from "./theme";
+import { useIdioma } from "./i18n";
 import { EMAIL, TELEFONE } from "./utils";
 
 const COR_TEXTO = CORES.fundo;
@@ -15,6 +16,7 @@ const COR_TEXTO = CORES.fundo;
 const linkSx = { color: COR_TEXTO, fontSize: "0.875rem" };
 
 function Footer() {
+  const { t } = useIdioma();
   return (
     <Box
       component="footer"
@@ -43,21 +45,20 @@ function Footer() {
               PLANAR
             </Typography>
             <Typography variant="body2" sx={{ lineHeight: 1.6 }}>
-              Soluções modernas em móveis com qualidade, elegância e design
-              pensado para o seu ambiente.
+              {t.rodape.slogan}
             </Typography>
           </Grid>
 
           <Grid size={{ xs: 12, sm: 3 }}>
             <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1.5 }}>
-              Navegação
+              {t.rodape.navegacao}
             </Typography>
             <Stack spacing={1}>
               <Link href="#inicio" underline="hover" sx={linkSx}>
-                Início
+                {t.rodape.inicio}
               </Link>
               <Link href="#produtos" underline="hover" sx={linkSx}>
-                Produtos
+                {t.rodape.produtos}
               </Link>
               <Link
                 component={RouterLink}
@@ -65,19 +66,19 @@ function Footer() {
                 underline="hover"
                 sx={{ ...linkSx, opacity: 0.7 }}
               >
-                Área do administrador
+                {t.rodape.admin}
               </Link>
             </Stack>
           </Grid>
 
           <Grid size={{ xs: 12, sm: 4 }}>
             <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1.5 }}>
-              Atendimento & Contato
+              {t.rodape.contato}
             </Typography>
             <Stack spacing={1.5}>
               <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                 <LocalPostOffice fontSize="small" />
-                <Typography variant="body2">Email:</Typography>
+                <Typography variant="body2">{t.rodape.email}</Typography>
                 <Link
                   href={`mailto:${EMAIL}`}
                   underline="hover"
@@ -89,7 +90,7 @@ function Footer() {
 
               <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                 <Call fontSize="small" />
-                <Typography variant="body2">Telefone:</Typography>
+                <Typography variant="body2">{t.rodape.telefone}</Typography>
                 <Link
                   href={`tel:+55${TELEFONE.replace(/\D/g, "")}`}
                   underline="hover"
@@ -106,8 +107,7 @@ function Footer() {
 
         <Box sx={{ textAlign: "center" }}>
           <Typography variant="caption">
-            © {new Date().getFullYear()} PLANAR Móveis. Todos os direitos
-            reservados.
+            {t.rodape.direitos(new Date().getFullYear())}
           </Typography>
         </Box>
       </Container>
