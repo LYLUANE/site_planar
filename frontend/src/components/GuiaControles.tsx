@@ -5,33 +5,28 @@ import PinchIcon from "@mui/icons-material/Pinch";
 import SwipeIcon from "@mui/icons-material/Swipe";
 import ThreeSixtyIcon from "@mui/icons-material/ThreeSixty";
 import TouchAppIcon from "@mui/icons-material/TouchApp";
+import { useIdioma } from "../i18n";
 import { CORES } from "../theme";
 
 const ehToque =
   typeof window !== "undefined" &&
   window.matchMedia("(pointer: coarse)").matches;
 
-const DICAS = ehToque
-  ? [
-      { Icone: SwipeIcon, acao: "Deslize", efeito: "para girar" },
-      { Icone: PinchIcon, acao: "Pinça", efeito: "para ampliar" },
-      { Icone: TouchAppIcon, acao: "Toque 2×", efeito: "para centralizar" },
-    ]
-  : [
-      { Icone: ThreeSixtyIcon, acao: "Arraste", efeito: "para girar" },
-      { Icone: MouseIcon, acao: "Scroll", efeito: "para ampliar" },
-      {
-        Icone: CenterFocusStrongIcon,
-        acao: "Duplo clique",
-        efeito: "para centralizar",
-      },
-    ];
+const ICONES = ehToque
+  ? [SwipeIcon, PinchIcon, TouchAppIcon]
+  : [ThreeSixtyIcon, MouseIcon, CenterFocusStrongIcon];
 
 function GuiaControles() {
+  const { t } = useIdioma();
+  const dicas = (ehToque ? t.guia.toque : t.guia.mouse).map((dica, i) => ({
+    ...dica,
+    Icone: ICONES[i],
+  }));
+
   return (
     <Box
       component="aside"
-      aria-label="Como manipular a mesa em 3D"
+      aria-label={t.guia.aria}
       sx={{
         border: `1px solid ${CORES.borda}`,
         bgcolor: CORES.fundoFaixa,
@@ -46,7 +41,7 @@ function GuiaControles() {
           gap: 1.5,
         }}
       >
-        {DICAS.map(({ Icone, acao, efeito }) => (
+        {dicas.map(({ Icone, acao, efeito }) => (
           <Stack
             key={acao}
             direction={{ xs: "column", sm: "row" }}

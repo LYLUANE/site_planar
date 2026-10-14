@@ -18,7 +18,8 @@ import MedidasDialog from "./components/MedidasDialog";
 import { useProdutos } from "./hooks/useProdutos";
 import type { Medidas, Produto } from "./types";
 import { CORES } from "./theme";
-import { formatarMedidas, formatarPreco } from "./utils";
+import { useIdioma } from "./i18n";
+import { formatarMedidas } from "./utils";
 
 export interface MajorProps {
   onAdicionarAoCarrinho: (
@@ -56,6 +57,7 @@ function CardCarregando() {
 
 function Major({ onAdicionarAoCarrinho }: MajorProps) {
   const { data: produtos, isPending, isError, error, refetch } = useProdutos();
+  const { t, textoDoProduto } = useIdioma();
   const [produtoEscolhido, setProdutoEscolhido] = useState<Produto | null>(
     null,
   );
@@ -80,11 +82,11 @@ function Major({ onAdicionarAoCarrinho }: MajorProps) {
             severity="error"
             action={
               <Button color="inherit" size="small" onClick={() => refetch()}>
-                Tentar de novo
+                {t.geral.tentarDeNovo}
               </Button>
             }
           >
-            Não foi possível carregar os produtos. {error.message}
+            {t.produtos.erroCarregar} {error.message}
           </Alert>
         </Grid>
       );
@@ -92,83 +94,84 @@ function Major({ onAdicionarAoCarrinho }: MajorProps) {
 
     if (produtos.length === 0) {
       return (
-        <Typography sx={{ color: CORES.fundo }}>
-          Nenhum produto cadastrado ainda.
-        </Typography>
+        <Typography sx={{ color: CORES.fundo }}>{t.produtos.vazio}</Typography>
       );
     }
 
-    return produtos.map((produto) => (
-      <Grid
-        key={produto.id}
-        size={tamanhoGrid}
-        sx={{ display: "flex", justifyContent: "center" }}
-      >
-        <Card sx={cardSx}>
-          <CardMedia
-            component="img"
-            image={produto.imagemUrl}
-            alt={produto.nome}
-            loading="lazy"
-            sx={{
-              height: 280,
-              width: "100%",
-              objectFit: "cover",
-              objectPosition: "center",
-            }}
-          />
-          <CardContent sx={{ flexGrow: 1, p: 2 }}>
-            <Typography
-              variant="subtitle1"
-              component="h3"
-              sx={{ fontWeight: 700, mb: 1 }}
-            >
-              {produto.nome}
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ color: "rgba(255, 255, 255, 0.75)", mb: 1.5 }}
-            >
-              {produto.descricao}
-            </Typography>
-            <Typography
-              variant="caption"
+    return produtos.map((produto) => {
+      const { nome, descricao } = textoDoProduto(produto);
+      return (
+        <Grid
+          key={produto.id}
+          size={tamanhoGrid}
+          sx={{ display: "flex", justifyContent: "center" }}
+        >
+          <Card sx={cardSx}>
+            <CardMedia
+              component="img"
+              image={produto.imagemUrl}
+              alt={nome}
+              loading="lazy"
               sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 0.5,
-                color: "rgba(255, 255, 255, 0.6)",
+                height: 280,
+                width: "100%",
+                objectFit: "cover",
+                objectPosition: "center",
               }}
-            >
-              <StraightenIcon fontSize="inherit" />
-              {formatarMedidas(produto.medidas)} (L × P × A)
-            </Typography>
-          </CardContent>
-          <CardActions sx={{ justifyContent: "space-between", px: 2, pb: 2 }}>
-            <Typography
-              variant="h6"
-              sx={{ color: "primary.main", fontWeight: 700 }}
-            >
-              {formatarPreco(produto.precoCentavos)}
-            </Typography>
-            <IconButton
-              onClick={() => setProdutoEscolhido(produto)}
-              sx={{
-                color: "white",
-                bgcolor: "rgba(255, 255, 255, 0.1)",
-                "&:hover": {
-                  bgcolor: "primary.main",
-                  color: "primary.contrastText",
-                },
-              }}
-              aria-label={`adicionar ${produto.nome} ao carrinho`}
-            >
-              <AddShoppingCartIcon />
-            </IconButton>
-          </CardActions>
-        </Card>
-      </Grid>
-    ));
+            />
+            <CardContent sx={{ flexGrow: 1, p: 2 }}>
+              <Typography
+                variant="subtitle1"
+                component="h3"
+                sx={{ fontWeight: 700, mb: 1 }}
+              >
+                {nome}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ color: "rgba(255, 255, 255, 0.75)", mb: 1.5 }}
+              >
+                {descricao}
+              </Typography>
+              <Typography
+                variant="caption"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                  color: "rgba(255, 255, 255, 0.6)",
+                }}
+              >
+                <StraightenIcon fontSize="inherit" />
+                {formatarMedidas(produto.medidas)} {t.produtos.eixos}
+              </Typography>
+            </CardContent>
+            <CardActions sx={{ justifyContent: "space-between", px: 2, pb: 2 }}>
+              <Typography
+                variant="h6"
+                sx={{ color: "primary.main", fontWeight: 700 }}
+              >
+                {t.preco(produto.precoCentavos)}
+              </Typography>
+              <IconButton
+                onClick={() => setProdutoEscolhido(produto)}
+                sx={{
+                  color: "white",
+                  bgcolor: "rgba(255, 255, 255, 0.1)",
+                  "&:hover": {
+                    bgcolor: "primary.main",
+                    color: "primary.contrastText",
+                  },
+                }}
+                aria-label={t.produtos.adicionarAria(nome)}
+              >
+                <AddShoppingCartIcon />
+              </IconButton>
+            </CardActions>
+          </Card>
+        </Grid>
+      );
+    });
   };
 
   return (
@@ -187,7 +190,7 @@ function Major({ onAdicionarAoCarrinho }: MajorProps) {
           textAlign: "center",
         }}
       >
-        Nossos Produtos
+        {t.produtos.titulo}
       </Typography>
 
       <Grid

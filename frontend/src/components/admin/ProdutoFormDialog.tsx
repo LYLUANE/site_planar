@@ -16,6 +16,8 @@ import {
 } from "@mui/material";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import { useSalvarProduto } from "../../hooks/useProdutos";
+import { useIdioma } from "../../i18n";
+import type { Textos } from "../../i18n/textos";
 import type { Medidas, Produto } from "../../types";
 import { reaisParaCentavos } from "../../utils";
 
@@ -41,40 +43,36 @@ const VAZIO: Valores = {
   altura: "",
 };
 
-const deProduto = (p: Produto): Valores => ({
+const deProduto = (p: Produto, separadorDecimal: string): Valores => ({
   nome: p.nome,
   descricao: p.descricao,
-  preco: (p.precoCentavos / 100).toFixed(2).replace(".", ","),
+  preco: (p.precoCentavos / 100).toFixed(2).replace(".", separadorDecimal),
   largura: String(p.medidas.largura),
   profundidade: String(p.medidas.profundidade),
   altura: String(p.medidas.altura),
 });
 
-const CAMPOS_MEDIDA: { chave: keyof Medidas; rotulo: string }[] = [
-  { chave: "largura", rotulo: "Largura" },
-  { chave: "profundidade", rotulo: "Profundidade" },
-  { chave: "altura", rotulo: "Altura" },
-];
+const CAMPOS_MEDIDA: (keyof Medidas)[] = ["largura", "profundidade", "altura"];
 
-function validar(v: Valores, temFoto: boolean) {
+function validar(v: Valores, temFoto: boolean, t: Textos) {
   const erros: Partial<Record<keyof Valores | "foto", string>> = {};
   const nome = v.nome.trim();
   const descricao = v.descricao.trim();
-  if (nome.length < 2 || nome.length > 80) erros.nome = "De 2 a 80 caracteres";
+  if (nome.length < 2 || nome.length > 80) erros.nome = t.formulario.erroNome;
   if (descricao.length < 5 || descricao.length > 500) {
-    erros.descricao = "De 5 a 500 caracteres";
+    erros.descricao = t.formulario.erroDescricao;
   }
   const centavos = reaisParaCentavos(v.preco);
   if (centavos === null || centavos < 1 || centavos > 100_000_000) {
-    erros.preco = "Ex.: 1.890,00";
+    erros.preco = t.formulario.erroPreco;
   }
-  for (const { chave } of CAMPOS_MEDIDA) {
+  for (const chave of CAMPOS_MEDIDA) {
     const n = Number(v[chave]);
     if (!/^\d+$/.test(v[chave]) || n < 1 || n > MEDIDA_MAX) {
-      erros[chave] = `1 a ${MEDIDA_MAX}`;
+      erros[chave] = t.formulario.erroMedida(MEDIDA_MAX);
     }
   }
-  if (!temFoto) erros.foto = "Escolha uma foto";
+  if (!temFoto) erros.foto = t.formulario.erroFoto;
   return erros;
 }
 
@@ -113,8 +111,9 @@ function Formulario({
   onClose,
 }: Omit<ProdutoFormDialogProps, "aberto">) {
   const salvar = useSalvarProduto();
+  const { t } = useIdioma();
   const [valores, setValores] = useState<Valores>(() =>
-    produto ? deProduto(produto) : VAZIO,
+    produto ? deProduto(produto, t.separadorDecimal) : VAZIO,
   );
   const [arquivo, setArquivo] = useState<File | null>(null);
   const [erroArquivo, setErroArquivo] = useState<string | null>(null);
@@ -123,7 +122,7 @@ function Formulario({
   );
   const [tentouEnviar, setTentouEnviar] = useState(false);
 
-  const erros = validar(valores, Boolean(arquivo || produto));
+  const erros = validar(valores, Boolean(arquivo || produto), t);
   const mostrar = (campo: keyof typeof erros) =>
     tentouEnviar ? erros[campo] : undefined;
 
@@ -140,11 +139,11 @@ function Formulario({
     e.target.value = "";
     if (!escolhido) return;
     if (!TIPOS_FOTO.includes(escolhido.type)) {
-      setErroArquivo("Use JPG, PNG ou WEBP");
+      setErroArquivo(t.formulario.erroTipoFoto);
       return;
     }
     if (escolhido.size > TAMANHO_MAX_FOTO) {
-      setErroArquivo("A foto deve ter até 2 MB");
+      setErroArquivo(t.formulario.erroTamanhoFoto);
       return;
     }
     setErroArquivo(null);
@@ -180,7 +179,7 @@ function Formulario({
   return (
     <Box component="form" onSubmit={enviar} noValidate>
       <DialogTitle sx={{ fontWeight: 700 }}>
-        {produto ? "Editar produto" : "Novo produto"}
+        {produto ? t.formulario.editar : t.formulario.novo}
       </DialogTitle>
       <DialogContent>
         {salvar.error && (
@@ -199,7 +198,7 @@ function Formulario({
           </Avatar>
           <Box>
             <Button component="label" variant="outlined" size="small">
-              {previa ? "Trocar foto" : "Escolher foto"}
+              {previa ? t.formulario.trocarFoto : t.formulario.escolherFoto}
               <input
                 type="file"
                 hidden
@@ -218,13 +217,13 @@ function Formulario({
                     : "text.secondary",
               }}
             >
-              {erroArquivo ?? mostrar("foto") ?? "JPG, PNG ou WEBP até 2 MB"}
+              {erroArquivo ?? mostrar("foto") ?? t.formulario.ajudaFoto}
             </Typography>
           </Box>
         </Stack>
 
         <TextField
-          label="Nome"
+          label={t.formulario.nome}
           value={valores.nome}
           onChange={alterar("nome")}
           error={Boolean(mostrar("nome"))}
@@ -234,7 +233,7 @@ function Formulario({
           slotProps={{ htmlInput: { maxLength: 80 } }}
         />
         <TextField
-          label="Descrição"
+          label={t.formulario.descricao}
           value={valores.descricao}
           onChange={alterar("descricao")}
           error={Boolean(mostrar("descricao"))}
@@ -246,9 +245,9 @@ function Formulario({
           slotProps={{ htmlInput: { maxLength: 500 } }}
         />
         <TextField
-          label="Preço"
+          label={t.formulario.preco}
           value={valores.preco}
-          onChange={alterar("preco", (t) => t.replace(/[^\d.,]/g, ""))}
+          onChange={alterar("preco", (texto) => texto.replace(/[^\d.,]/g, ""))}
           error={Boolean(mostrar("preco"))}
           helperText={mostrar("preco")}
           margin="dense"
@@ -263,13 +262,13 @@ function Formulario({
         />
 
         <Typography variant="subtitle2" sx={{ mt: 2, mb: 0.5 }}>
-          Medidas padrão (cm)
+          {t.formulario.medidasPadrao}
         </Typography>
         <Stack direction="row" spacing={1.5}>
-          {CAMPOS_MEDIDA.map(({ chave, rotulo }) => (
+          {CAMPOS_MEDIDA.map((chave) => (
             <TextField
               key={chave}
-              label={rotulo}
+              label={t.medidas[chave]}
               value={valores[chave]}
               onChange={alterar(chave, (t) => t.replace(/\D/g, "").slice(0, 3))}
               error={Boolean(mostrar(chave))}
@@ -282,13 +281,13 @@ function Formulario({
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2 }}>
         <Button onClick={onClose} color="inherit" disabled={salvar.isPending}>
-          Cancelar
+          {t.geral.cancelar}
         </Button>
         <Button type="submit" variant="contained" disabled={salvar.isPending}>
           {salvar.isPending ? (
             <CircularProgress size={22} color="inherit" />
           ) : (
-            "Salvar"
+            t.geral.salvar
           )}
         </Button>
       </DialogActions>

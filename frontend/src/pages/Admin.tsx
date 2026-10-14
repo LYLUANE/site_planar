@@ -40,13 +40,16 @@ import {
 } from "../hooks/useProdutos";
 import { CORES } from "../theme";
 import type { Produto } from "../types";
-import { formatarMedidas, formatarPreco } from "../utils";
+import SeletorIdioma from "../components/SeletorIdioma";
+import { useIdioma } from "../i18n";
+import { formatarMedidas } from "../utils";
 
 function Admin() {
   const { usuario, sair } = useAuth();
   const { data: produtos, isPending, isError, error } = useProdutos();
   const remover = useRemoverProduto();
   const restaurar = useRestaurarDemo();
+  const { t, textoDoProduto } = useIdioma();
 
   const [formAberto, setFormAberto] = useState(false);
   const [emEdicao, setEmEdicao] = useState<Produto | null>(null);
@@ -88,13 +91,18 @@ function Admin() {
           >
             {usuario?.login}
           </Typography>
-          <Tooltip title="Ver site">
+          <SeletorIdioma />
+          <Tooltip title={t.admin.verSite}>
             <IconButton component={RouterLink} to="/" color="inherit">
               <OpenInNewIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Sair">
-            <IconButton onClick={sair} color="inherit" aria-label="sair">
+          <Tooltip title={t.admin.sair}>
+            <IconButton
+              onClick={sair}
+              color="inherit"
+              aria-label={t.admin.sair}
+            >
               <LogoutIcon />
             </IconButton>
           </Tooltip>
@@ -112,14 +120,14 @@ function Admin() {
           }}
         >
           <Typography variant="h5" component="h1" sx={{ fontWeight: 700 }}>
-            Produtos
+            {t.admin.produtos}
           </Typography>
           <Button
             variant="contained"
             startIcon={<AddIcon />}
             onClick={abrirNovo}
           >
-            Novo produto
+            {t.admin.novo}
           </Button>
         </Box>
 
@@ -134,12 +142,11 @@ function Admin() {
                 disabled={restaurar.isPending}
                 onClick={() => restaurar.mutate()}
               >
-                Restaurar produtos
+                {t.admin.restaurar}
               </Button>
             }
           >
-            Modo demonstração: cadastre, edite e remova à vontade. As alterações
-            ficam salvas só neste navegador.
+            {t.admin.avisoDemo}
           </Alert>
         )}
 
@@ -162,13 +169,13 @@ function Admin() {
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell>Produto</TableCell>
+                <TableCell>{t.admin.colunaProduto}</TableCell>
                 <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
-                  Medidas (L × P × A)
+                  {t.admin.colunaMedidas}
                 </TableCell>
-                <TableCell align="right">Preço</TableCell>
+                <TableCell align="right">{t.admin.colunaPreco}</TableCell>
                 <TableCell align="right" sx={{ width: 110 }}>
-                  Ações
+                  {t.admin.colunaAcoes}
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -185,7 +192,7 @@ function Admin() {
               {produtos?.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={4} sx={{ textAlign: "center", py: 4 }}>
-                    Nenhum produto cadastrado. Clique em “Novo produto”.
+                    {t.admin.vazio}
                   </TableCell>
                 </TableRow>
               )}
@@ -204,7 +211,7 @@ function Admin() {
                       />
                       <Box sx={{ minWidth: 0 }}>
                         <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                          {produto.nome}
+                          {textoDoProduto(produto).nome}
                         </Typography>
                         <Typography
                           variant="caption"
@@ -212,7 +219,7 @@ function Admin() {
                           component="div"
                           sx={{ color: "text.secondary", maxWidth: 320 }}
                         >
-                          {produto.descricao}
+                          {textoDoProduto(produto).descricao}
                         </Typography>
                       </Box>
                     </Box>
@@ -221,20 +228,24 @@ function Admin() {
                     {formatarMedidas(produto.medidas)}
                   </TableCell>
                   <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
-                    {formatarPreco(produto.precoCentavos)}
+                    {t.preco(produto.precoCentavos)}
                   </TableCell>
                   <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
                     <IconButton
                       size="small"
                       onClick={() => abrirEdicao(produto)}
-                      aria-label={`editar ${produto.nome}`}
+                      aria-label={t.admin.editarAria(
+                        textoDoProduto(produto).nome,
+                      )}
                     >
                       <EditOutlinedIcon fontSize="small" />
                     </IconButton>
                     <IconButton
                       size="small"
                       onClick={() => setParaRemover(produto)}
-                      aria-label={`remover ${produto.nome}`}
+                      aria-label={t.admin.removerAria(
+                        textoDoProduto(produto).nome,
+                      )}
                       sx={{ color: "error.main" }}
                     >
                       <DeleteOutlineIcon fontSize="small" />
@@ -258,16 +269,18 @@ function Admin() {
         onClose={() => setParaRemover(null)}
         slotProps={{ paper: { sx: { backgroundImage: "none" } } }}
       >
-        <DialogTitle sx={{ fontWeight: 700 }}>Remover produto?</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700 }}>
+          {t.admin.removerTitulo}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <strong>{paraRemover?.nome}</strong> será removido do site. Essa
-            ação não pode ser desfeita.
+            <strong>{paraRemover && textoDoProduto(paraRemover).nome}</strong>{" "}
+            {t.admin.removerTexto}
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
           <Button onClick={() => setParaRemover(null)} color="inherit">
-            Cancelar
+            {t.geral.cancelar}
           </Button>
           <Button
             variant="contained"
@@ -280,7 +293,7 @@ function Admin() {
               })
             }
           >
-            Remover
+            {t.geral.remover}
           </Button>
         </DialogActions>
       </Dialog>

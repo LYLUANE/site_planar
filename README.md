@@ -36,6 +36,13 @@ O frontend usa `VITE_API_URL` (já definido em `frontend/.env.development` como
 | `/login`  | Login do administrador (JWT)                               |
 | `/admin`  | Cadastro, edição e remoção de produtos (só admin)          |
 
+## Idiomas (PT / EN)
+
+O site é bilíngue, com seletor **PT | EN** no topo da loja, no login e no painel.
+O idioma inicial segue o navegador do visitante e pode ser forçado pela URL:
+`/site_planar/?lang=en` ou `?lang=pt`. Os textos ficam em
+`frontend/src/i18n/textos.ts` (o TypeScript acusa se faltar alguma tradução).
+
 ## Organização do frontend
 
 ```

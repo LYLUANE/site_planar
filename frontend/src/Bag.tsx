@@ -24,13 +24,13 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import type { Carrinho } from "./hooks/useCarrinho";
+import { useIdioma } from "./i18n";
 import type { ItemCarrinho } from "./types";
 import { CORES } from "./theme";
 import {
   calcularTotal,
   formatarMedidas,
-  formatarPreco,
-  linkPedidoWhatsApp,
+  linkWhatsApp,
   medidasIguais,
 } from "./utils";
 
@@ -50,6 +50,24 @@ function Bag({ open, onClose, carrinho: carrinhoHook }: CarrinhoProps) {
   const [itemParaDeletar, setItemParaDeletar] = useState<ItemCarrinho | null>(
     null,
   );
+  const { t, textoDoProduto } = useIdioma();
+
+  const mensagemPedido = () =>
+    t.whatsapp.pedido(
+      carrinho.map(({ produto, medidas, quantidade }) =>
+        t.whatsapp.linha({
+          quantidade,
+          nome: textoDoProduto(produto).nome,
+          medidas: formatarMedidas(medidas),
+          personalizado: !medidasIguais(medidas, produto.medidas),
+          subtotal: t.preco(produto.precoCentavos * quantidade),
+        }),
+      ),
+      t.preco(calcularTotal(carrinho)),
+      carrinho.some(
+        (item) => !medidasIguais(item.medidas, item.produto.medidas),
+      ),
+    );
 
   const handleConfirmarRemocao = () => {
     if (itemParaDeletar) {
@@ -89,10 +107,10 @@ function Bag({ open, onClose, carrinho: carrinhoHook }: CarrinhoProps) {
             pb: 2,
           }}
         >
-          <Typography variant="h6">Seu Carrinho ({totalItens})</Typography>
+          <Typography variant="h6">{t.carrinho.titulo(totalItens)}</Typography>
           <IconButton
             onClick={onClose}
-            aria-label="fechar carrinho"
+            aria-label={t.carrinho.fecharAria}
             sx={{ color: "white" }}
           >
             <CloseIcon />
@@ -107,13 +125,14 @@ function Bag({ open, onClose, carrinho: carrinhoHook }: CarrinhoProps) {
               variant="body1"
               sx={{ textAlign: "center", mt: 4, color: "gray" }}
             >
-              Seu carrinho está vazio.
+              {t.carrinho.vazio}
             </Typography>
           ) : (
             <List disablePadding>
               {carrinho.map((item) => {
                 const { produto, medidas, quantidade } = item;
                 const personalizado = !medidasIguais(medidas, produto.medidas);
+                const { nome } = textoDoProduto(produto);
                 return (
                   <Fragment key={item.chave}>
                     <ListItem
@@ -122,7 +141,7 @@ function Bag({ open, onClose, carrinho: carrinhoHook }: CarrinhoProps) {
                       secondaryAction={
                         <IconButton
                           edge="end"
-                          aria-label={`remover ${produto.nome}`}
+                          aria-label={t.carrinho.removerAria(nome)}
                           onClick={() => setItemParaDeletar(item)}
                           sx={{ color: "#ff5252" }}
                         >
@@ -133,7 +152,7 @@ function Bag({ open, onClose, carrinho: carrinhoHook }: CarrinhoProps) {
                       <ListItemAvatar>
                         <Avatar
                           src={produto.imagemUrl}
-                          alt={produto.nome}
+                          alt={nome}
                           variant="rounded"
                           sx={{ width: 56, height: 56, mr: 1 }}
                         />
@@ -142,7 +161,7 @@ function Bag({ open, onClose, carrinho: carrinhoHook }: CarrinhoProps) {
                         disableTypography
                         primary={
                           <Typography variant="subtitle2" noWrap>
-                            {produto.nome}
+                            {nome}
                           </Typography>
                         }
                         secondary={
@@ -158,7 +177,7 @@ function Bag({ open, onClose, carrinho: carrinhoHook }: CarrinhoProps) {
                                   component="span"
                                   sx={{ color: "primary.main", ml: 0.5 }}
                                 >
-                                  • personalizado
+                                  {t.carrinho.personalizado}
                                 </Box>
                               )}
                             </Typography>
@@ -167,7 +186,7 @@ function Bag({ open, onClose, carrinho: carrinhoHook }: CarrinhoProps) {
                               component="div"
                               sx={{ color: "primary.main" }}
                             >
-                              {formatarPreco(produto.precoCentavos)}
+                              {t.preco(produto.precoCentavos)}
                             </Typography>
                             <Stack
                               direction="row"
@@ -175,7 +194,7 @@ function Bag({ open, onClose, carrinho: carrinhoHook }: CarrinhoProps) {
                             >
                               <IconButton
                                 size="small"
-                                aria-label={`diminuir quantidade de ${produto.nome}`}
+                                aria-label={t.carrinho.diminuirAria(nome)}
                                 onClick={() => diminuir(item)}
                                 sx={{ color: "white" }}
                               >
@@ -190,7 +209,7 @@ function Bag({ open, onClose, carrinho: carrinhoHook }: CarrinhoProps) {
                               </Typography>
                               <IconButton
                                 size="small"
-                                aria-label={`aumentar quantidade de ${produto.nome}`}
+                                aria-label={t.carrinho.aumentarAria(nome)}
                                 onClick={() =>
                                   alterarQuantidade(item.chave, quantidade + 1)
                                 }
@@ -220,16 +239,16 @@ function Bag({ open, onClose, carrinho: carrinhoHook }: CarrinhoProps) {
                 mb: 2,
               }}
             >
-              <Typography variant="subtitle1">Total</Typography>
+              <Typography variant="subtitle1">{t.carrinho.total}</Typography>
               <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-                {formatarPreco(calcularTotal(carrinho))}
+                {t.preco(calcularTotal(carrinho))}
               </Typography>
             </Box>
             <Button
               variant="contained"
               fullWidth
               startIcon={<WhatsAppIcon />}
-              href={linkPedidoWhatsApp(carrinho)}
+              href={linkWhatsApp(mensagemPedido())}
               target="_blank"
               rel="noopener noreferrer"
               sx={{
@@ -238,7 +257,7 @@ function Bag({ open, onClose, carrinho: carrinhoHook }: CarrinhoProps) {
                 borderRadius: 0,
               }}
             >
-              Finalizar Pedido
+              {t.carrinho.finalizar}
             </Button>
           </Box>
         )}
@@ -258,11 +277,16 @@ function Bag({ open, onClose, carrinho: carrinhoHook }: CarrinhoProps) {
           },
         }}
       >
-        <DialogTitle sx={{ fontWeight: 700 }}>Remover produto?</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 700 }}>
+          {t.carrinho.removerTitulo}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ color: "rgba(255, 255, 255, 0.7)" }}>
-            Tem certeza de que deseja remover{" "}
-            <strong>{itemParaDeletar?.produto.nome}</strong> do carrinho?
+            {t.carrinho.removerAntes}{" "}
+            <strong>
+              {itemParaDeletar && textoDoProduto(itemParaDeletar.produto).nome}
+            </strong>{" "}
+            {t.carrinho.removerDepois}
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
@@ -270,7 +294,7 @@ function Bag({ open, onClose, carrinho: carrinhoHook }: CarrinhoProps) {
             onClick={() => setItemParaDeletar(null)}
             sx={{ color: "white", opacity: 0.8 }}
           >
-            Cancelar
+            {t.geral.cancelar}
           </Button>
           <Button
             onClick={handleConfirmarRemocao}
@@ -278,7 +302,7 @@ function Bag({ open, onClose, carrinho: carrinhoHook }: CarrinhoProps) {
             color="error"
             autoFocus
           >
-            Remover
+            {t.geral.remover}
           </Button>
         </DialogActions>
       </Dialog>
