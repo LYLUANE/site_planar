@@ -11,11 +11,13 @@ import {
   Typography,
 } from "@mui/material";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import type { Medidas, Produto } from "../types";
 import {
   formatarMedidas,
   formatarPreco,
   LIMITES_MEDIDA,
+  linkOrcamentoWhatsApp,
   medidasIguais,
 } from "../utils";
 
@@ -99,11 +101,11 @@ function FormularioMedidas({
     profundidade: Number(valores.profundidade),
     altura: Number(valores.altura),
   };
-  const personalizado = valido && !medidasIguais(medidas, produto.medidas);
+  const personalizado = !medidasIguais(medidas, produto.medidas);
 
   const confirmar = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!valido) return;
+    if (!valido || personalizado) return;
     onConfirmar(produto, medidas, Number(quantidade));
   };
 
@@ -170,15 +172,20 @@ function FormularioMedidas({
           </Button>
         </Stack>
 
-        <Typography
-          variant="h6"
-          sx={{ color: "primary.main", fontWeight: 700 }}
-        >
-          {formatarPreco(produto.precoCentavos * (Number(quantidade) || 1))}
-        </Typography>
-        {personalizado && (
-          <Typography variant="caption" sx={{ color: "text.secondary" }}>
-            Medidas personalizadas: o valor final é confirmado no atendimento.
+        {personalizado ? (
+          <Typography
+            variant="body2"
+            sx={{ color: "primary.main", fontWeight: 600 }}
+          >
+            Para um orçamento mais detalhado, converse com o vendedor desta
+            peça.
+          </Typography>
+        ) : (
+          <Typography
+            variant="h6"
+            sx={{ color: "primary.main", fontWeight: 700 }}
+          >
+            {formatarPreco(produto.precoCentavos * (Number(quantidade) || 1))}
           </Typography>
         )}
       </DialogContent>
@@ -186,9 +193,23 @@ function FormularioMedidas({
         <Button onClick={onClose} color="inherit">
           Cancelar
         </Button>
-        <Button type="submit" variant="contained" disabled={!valido}>
-          Adicionar ao carrinho
-        </Button>
+        {personalizado ? (
+          <Button
+            variant="contained"
+            startIcon={<WhatsAppIcon />}
+            disabled={!valido}
+            href={linkOrcamentoWhatsApp(produto, medidas, Number(quantidade))}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClose}
+          >
+            Conversar com o vendedor
+          </Button>
+        ) : (
+          <Button type="submit" variant="contained" disabled={!valido}>
+            Adicionar ao carrinho
+          </Button>
+        )}
       </DialogActions>
     </Box>
   );

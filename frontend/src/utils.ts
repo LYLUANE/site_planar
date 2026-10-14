@@ -1,8 +1,8 @@
-import type { ItemCarrinho, Medidas } from "./types";
+import type { ItemCarrinho, Medidas, Produto } from "./types";
 
-export const TELEFONE = "(14) 99665-1162";
+export const TELEFONE = "(11) 99575-8331";
 export const EMAIL = "planar_moveis@gmail.com";
-const WHATSAPP = "5514996651162";
+const WHATSAPP = "5511995758331";
 
 export const LIMITES_MEDIDA: Record<
   keyof Medidas,
@@ -85,6 +85,21 @@ export function linkPedidoWhatsApp(itens: ItemCarrinho[]) {
     ...(temPersonalizado
       ? ["", "Sei que o valor pode mudar por causa das medidas personalizadas."]
       : []),
+  ].join("\n");
+
+  return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(mensagem)}`;
+}
+
+export function linkOrcamentoWhatsApp(
+  produto: Produto,
+  medidas: Medidas,
+  quantidade: number,
+) {
+  const mensagem = [
+    `Olá! Gostaria de um orçamento para ${quantidade}x ${produto.nome} com medidas personalizadas:`,
+    "",
+    `• Medidas desejadas: ${formatarMedidas(medidas)} (L × P × A)`,
+    `• Medidas padrão: ${formatarMedidas(produto.medidas)}`,
   ].join("\n");
 
   return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(mensagem)}`;
