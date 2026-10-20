@@ -27,7 +27,9 @@ jobs:
         with:
           node-version: 24
           cache: npm
-          cache-dependency-path: frontend/package-lock.json
+          cache-dependency-path: |
+            frontend/package-lock.json
+            portfolio/package-lock.json
       - run: npm ci
       - run: npm run build
         env:
@@ -39,6 +41,13 @@ jobs:
       # O Pages não conhece as rotas do React (/login, /admin): o 404.html
       # devolve o próprio app, que resolve a rota no navegador
       - run: cp dist/index.html dist/404.html
+      # Portfólio pessoal publicado junto, em /site_planar/portfolio/
+      - name: Build do portfólio
+        working-directory: portfolio
+        run: |
+          npm ci
+          npm run build
+          cp -r dist ../frontend/dist/portfolio
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
