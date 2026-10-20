@@ -1,9 +1,11 @@
 import { useRef } from "react";
+import { useIdioma } from "../i18n/idioma";
 import { gsap, useGSAP } from "../lib/gsap";
 
 // A palavra gigante cresce até "engolir" a tela e virar o fundo da seção de contato
 export default function Transicao() {
   const raiz = useRef<HTMLElement>(null);
+  const { t } = useIdioma();
 
   useGSAP(
     () => {
@@ -22,7 +24,7 @@ export default function Transicao() {
 
   return (
     <section className="transicao" ref={raiz} aria-hidden>
-      <p className="transicao-pre serif">do back ao front, eu sou</p>
+      <p className="transicao-pre serif">{t.transicao}</p>
       <h2 className="transicao-palavra grad-text">DEV</h2>
       <div className="transicao-veu" />
     </section>

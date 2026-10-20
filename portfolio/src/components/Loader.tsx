@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { perfil } from "../data";
+import { useIdioma } from "../i18n/idioma";
 import { pintarGradiente } from "../lib/efeitos";
 import { gsap, reduzMovimento, useGSAP } from "../lib/gsap";
 
@@ -7,6 +8,7 @@ import { gsap, reduzMovimento, useGSAP } from "../lib/gsap";
 export default function Loader({ onRevelar, onFim }: { onRevelar: () => void; onFim: () => void }) {
   const raiz = useRef<HTMLDivElement>(null);
   const contador = useRef<HTMLSpanElement>(null);
+  const { t } = useIdioma();
 
   useGSAP(
     () => {
@@ -50,7 +52,7 @@ export default function Loader({ onRevelar, onFim }: { onRevelar: () => void; on
         ))}
       </div>
       <div className="loader-rodape">
-        <span className="serif">preparando a magia</span>
+        <span className="serif">{t.loader}</span>
         <span className="loader-barra">
           <i />
         </span>

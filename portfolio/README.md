@@ -23,9 +23,17 @@ npm run build     # gera dist/ (base relativa, funciona em qualquer subpasta)
 | Transição  | "DEV" cresce até virar o fundo da seção de contato                     |
 | Contato    | botão magnético para o GitHub                                          |
 
+## Idiomas (PT / EN)
+
+Seletor **PT | EN** na barra do topo. O idioma inicial vem de `?lang=pt` / `?lang=en`
+na URL, depois da última escolha do visitante e, por fim, do idioma do navegador.
+Todos os textos ficam em `src/i18n/textos.ts`; o TypeScript acusa se faltar alguma
+tradução.
+
 ## Onde editar
 
-- Textos, idade, links, tecnologias e legendas: `src/data.ts`
+- Textos e legendas (nos dois idiomas): `src/i18n/textos.ts`
+- Idade, links, tecnologias e ordem das fotos: `src/data.ts`
 - Fotos: `public/fotos/*.webp` (referenciadas pelo nome em `data.ts`)
 - Cores e gradientes: variáveis no topo de `src/styles.css`
 - Cena 3D (luzes, palco, câmera): `src/components/StackCena.tsx`

@@ -1,10 +1,12 @@
 import { useRef } from "react";
+import { useIdioma } from "../i18n/idioma";
 import { pintarGradiente } from "../lib/efeitos";
 import { gsap, SplitText, useGSAP } from "../lib/gsap";
 
 // Texto que "acende" palavra por palavra enquanto a seção fica fixada na tela
 export default function Manifesto() {
   const raiz = useRef<HTMLElement>(null);
+  const { t } = useIdioma();
 
   useGSAP(
     () => {
@@ -34,8 +36,7 @@ export default function Manifesto() {
     <section className="manifesto" ref={raiz}>
       <div className="manifesto-orbe" aria-hidden />
       <p className="manifesto-texto">
-        Eu transformo <b>café,</b> lógica e uma pitada de <b>magia</b> em interfaces que as pessoas{" "}
-        <b>sentem</b> — do banco de dados ao último <b>pixel.</b>
+        {t.manifesto.map((trecho, i) => (typeof trecho === "string" ? trecho : <b key={i}>{trecho.d}</b>))}
       </p>
     </section>
   );

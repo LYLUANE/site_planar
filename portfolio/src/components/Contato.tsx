@@ -1,11 +1,13 @@
 import { useRef } from "react";
 import { foto, perfil } from "../data";
+import { useIdioma } from "../i18n/idioma";
 import { revelarTitulo } from "../lib/efeitos";
 import { ehToque, gsap, useGSAP } from "../lib/gsap";
 
 export default function Contato() {
   const raiz = useRef<HTMLElement>(null);
   const botao = useRef<HTMLAnchorElement>(null);
+  const { t } = useIdioma();
 
   useGSAP(
     () => {
@@ -52,9 +54,9 @@ export default function Contato() {
       <img className="contato-polaroid p1" src={foto("pet2")} alt="" loading="lazy" />
       <img className="contato-polaroid p2" src={foto("sorriso")} alt="" loading="lazy" />
 
-      <p className="eyebrow">04 — Contato</p>
+      <p className="eyebrow">{t.contato.eyebrow}</p>
       <h2 className="contato-titulo">
-        Vamos criar algo <em className="serif">mágico</em> juntos?
+        {t.contato.titulo} <em className="serif">{t.contato.destaque}</em> {t.contato.fim}
       </h2>
       <a
         ref={botao}
@@ -65,7 +67,7 @@ export default function Contato() {
         onPointerMove={atrair}
         onPointerLeave={largar}
       >
-        <span>Ver meu GitHub</span>
+        <span>{t.contato.botao}</span>
         <b aria-hidden>↗</b>
       </a>
 
@@ -73,7 +75,7 @@ export default function Contato() {
         <span>
           © {new Date().getFullYear()} {perfil.nome} {perfil.sobrenome}
         </span>
-        <span>feito com React, Three.js & GSAP ✦</span>
+        <span>{t.contato.feito}</span>
       </footer>
     </section>
   );
