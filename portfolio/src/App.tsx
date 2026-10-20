@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Contato from "./components/Contato";
 import Cursor from "./components/Cursor";
 import Estrelas from "./components/Estrelas";
@@ -10,12 +10,24 @@ import Nav from "./components/Nav";
 import Sobre from "./components/Sobre";
 import Stack from "./components/Stack";
 import Transicao from "./components/Transicao";
+import { useIdioma } from "./i18n/idioma";
 import { reduzMovimento } from "./lib/gsap";
-import { iniciarScrollSuave, travarScroll } from "./lib/scroll";
+import { iniciarScrollSuave, restaurarPosicao, travarScroll } from "./lib/scroll";
 
 export default function App() {
   const [pronto, setPronto] = useState(false);
   const [carregando, setCarregando] = useState(true);
+  const { idioma } = useIdioma();
+  const primeiroIdioma = useRef(idioma);
+
+  // <main> é remontado a cada troca de idioma (as animações dividem o texto em letras,
+  // então o jeito limpo é recriá-las); aqui o scroll volta para onde estava
+  useLayoutEffect(() => {
+    if (idioma !== primeiroIdioma.current) {
+      primeiroIdioma.current = idioma;
+      restaurarPosicao();
+    }
+  }, [idioma]);
 
   useEffect(() => {
     history.scrollRestoration = "manual";
@@ -35,7 +47,7 @@ export default function App() {
       <Cursor />
       {carregando && <Loader onRevelar={() => setPronto(true)} onFim={() => setCarregando(false)} />}
       <Nav />
-      <main id="topo">
+      <main id="topo" key={idioma}>
         <Hero pronto={pronto} />
         <Manifesto />
         <Sobre />

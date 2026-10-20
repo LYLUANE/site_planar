@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { techs } from "../data";
+import { useIdioma } from "../i18n/idioma";
 import { pintarGradiente, revelarTitulo } from "../lib/efeitos";
 import { gsap, ScrollTrigger, SplitText, useGSAP } from "../lib/gsap";
 import type { EstadoStack } from "./StackCena";
@@ -9,6 +10,7 @@ const StackCanvas = lazy(() => import("./StackCena"));
 export default function Stack() {
   const raiz = useRef<HTMLElement>(null);
   const info = useRef<HTMLDivElement>(null);
+  const { t } = useIdioma();
   const estado = useRef<EstadoStack>({ montagem: 0, anel: 0 });
   const [ativo, setAtivo] = useState(0);
   const [visivel, setVisivel] = useState(false);
@@ -59,6 +61,7 @@ export default function Stack() {
   );
 
   const tech = techs[ativo];
+  const txt = t.techs[tech.nome];
 
   return (
     <>
@@ -69,9 +72,9 @@ export default function Stack() {
         </Suspense>
 
         <div className="stack-cabeca">
-          <p className="eyebrow">02 — Stack fullstack</p>
+          <p className="eyebrow">{t.stack.eyebrow}</p>
           <h2 className="titulo">
-            Meu <em className="serif">palco</em>
+            {t.stack.titulo} <em className="serif">{t.stack.destaque}</em>
           </h2>
         </div>
 
@@ -82,18 +85,18 @@ export default function Stack() {
           <h3 className="stack-nome" key={tech.nome}>
             {tech.nome}
           </h3>
-          <p className="stack-frase serif">{tech.frase}</p>
+          <p className="stack-frase serif">{txt.frase}</p>
           <span className="stack-area" style={{ "--cor": tech.cor } as React.CSSProperties}>
-            {tech.area}
+            {txt.area}
           </span>
         </div>
 
-        <ol className="stack-pontos" aria-label="Tecnologias">
+        <ol className="stack-pontos" aria-label={t.stack.aria}>
           {techs.map((t, i) => (
             <li key={t.nome} className={i === ativo ? "ativo" : ""} title={t.nome} />
           ))}
         </ol>
-        <p className="stack-dica">passe o mouse nos ícones para girá-los ✦</p>
+        <p className="stack-dica">{t.stack.dica}</p>
       </div>
     </section>
 

@@ -1,10 +1,12 @@
 import { useRef } from "react";
 import { fatos, foto, perfil } from "../data";
+import { useIdioma } from "../i18n/idioma";
 import { inclinar, revelarTitulo, soltar } from "../lib/efeitos";
 import { gsap, useGSAP } from "../lib/gsap";
 
 export default function Sobre() {
   const raiz = useRef<HTMLElement>(null);
+  const { t } = useIdioma();
 
   useGSAP(
     () => {
@@ -40,33 +42,35 @@ export default function Sobre() {
   return (
     <section id="sobre" className="sobre secao" ref={raiz}>
       <div className="sobre-topo">
-        <p className="eyebrow">01 — Sobre mim</p>
+        <p className="eyebrow">{t.sobre.eyebrow}</p>
         <h2 className="titulo">
-          Prazer, <em className="serif">{perfil.nome}</em>
+          {t.sobre.titulo} <em className="serif">{perfil.nome}</em>
         </h2>
         <p className="sobre-intro">
-          Engenheira da computação e desenvolvedora fullstack. Amo construir produtos completos — da API robusta à
-          interface que encanta — cuidando de cada detalhe, animação e experiência.
+          {t.sobre.intro}
         </p>
       </div>
 
       <div className="cards">
-        {fatos.map((f) => (
+        {fatos.map((f) => {
+          const txt: { titulo: string; destaque?: string; texto: string } = t.fatos[f.id];
+          return (
           <article key={f.id} className="card3d" onPointerMove={(e) => inclinar(e)} onPointerLeave={soltar}>
             <div className="card3d-inner">
               <img src={foto(f.foto)} alt="" loading="lazy" />
               <div className="card3d-holo" aria-hidden />
               <div className="card3d-conteudo">
-                {f.numero !== undefined && <span className="fato-numero grad-text">{f.numero}</span>}
+                {"numero" in f && <span className="fato-numero grad-text">{f.numero}</span>}
                 <h3>
-                  {f.titulo}
-                  {f.destaque && <em className="serif"> {f.destaque}</em>}
+                  {txt.titulo}
+                  {txt.destaque && <em className="serif"> {txt.destaque}</em>}
                 </h3>
-                <p>{f.texto}</p>
+                <p>{txt.texto}</p>
               </div>
             </div>
           </article>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

@@ -1,12 +1,12 @@
 import { useRef } from "react";
 import { foto, perfil } from "../data";
+import { useIdioma } from "../i18n/idioma";
 import { pintarGradiente } from "../lib/efeitos";
 import { gsap, SplitText, useGSAP } from "../lib/gsap";
 
-const SELO = "ENGENHEIRA DA COMPUTAÇÃO ✦ DEV FULLSTACK ✦ ";
-
 export default function Hero({ pronto }: { pronto: boolean }) {
   const raiz = useRef<HTMLElement>(null);
+  const { t } = useIdioma();
 
   // Parallax ao rolar: o nome se abre para os lados e a foto sobe girando
   useGSAP(
@@ -68,14 +68,17 @@ export default function Hero({ pronto }: { pronto: boolean }) {
       <div className="hero-foto">
         <div className="arco-brilho" aria-hidden />
         <div className="arco">
-          <img src={foto("hero")} alt={`${perfil.nome} sorrindo em frente à turbina de um avião`} />
+          <img src={foto("hero")} alt={t.hero.alt} />
         </div>
         <svg className="selo hero-anima" viewBox="0 0 200 200" aria-hidden>
           <defs>
             <path id="circulo" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" />
           </defs>
           <text>
-            <textPath href="#circulo">{SELO}</textPath>
+            {/* textLength estica o texto para fechar o círculo em qualquer idioma */}
+            <textPath href="#circulo" textLength={488} lengthAdjust="spacing">
+              {t.hero.selo}
+            </textPath>
           </text>
           <text x="100" y="112" textAnchor="middle" className="selo-estrela">
             ✦
@@ -85,11 +88,11 @@ export default function Hero({ pronto }: { pronto: boolean }) {
 
       <div className="hero-rodape">
         <p className="hero-papel hero-anima">
-          <span className="serif">Olá, mundo! Eu sou</span> Engenheira da Computação{" "}
-          <em className="serif grad-text">&</em> Dev Fullstack.
+          <span className="serif">{t.hero.ola}</span> {t.hero.papel} <em className="serif grad-text">&</em>{" "}
+          {t.hero.papel2}
         </p>
         <div className="hero-scroll hero-anima">
-          role para descobrir <i />
+          {t.hero.scroll} <i />
         </div>
       </div>
     </section>

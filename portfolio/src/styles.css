@@ -295,6 +295,35 @@ main {
   color: #fff;
   background: rgba(255, 255, 255, 0.08);
 }
+.nav nav {
+  margin-left: auto;
+}
+.nav-idioma {
+  display: flex;
+  margin-left: 8px;
+  padding: 3px;
+  border-radius: 999px;
+  border: 1px solid var(--borda);
+}
+.nav-idioma button {
+  border: 0;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--texto-suave);
+  font: 600 0.72rem/1 var(--fonte-corpo);
+  letter-spacing: 0.08em;
+  transition: color 0.3s, background 0.3s;
+}
+.nav-idioma button:hover {
+  color: #fff;
+}
+.nav-idioma button[aria-pressed="true"] {
+  color: #fff;
+  background: var(--gradiente);
+  box-shadow: 0 0 14px rgba(255, 62, 165, 0.5);
+}
 
 /* ---------- hero ---------- */
 .hero {
@@ -1015,6 +1044,15 @@ main {
   }
   .nav nav a:first-child {
     display: none;
+  }
+  .nav {
+    padding-left: 16px;
+  }
+  .nav-idioma {
+    margin-left: 2px;
+  }
+  .nav-idioma button {
+    padding: 6px 8px;
   }
   .hero-nome {
     gap: 46vw;

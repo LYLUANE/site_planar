@@ -1,16 +1,20 @@
 import { useRef } from "react";
+import { useIdioma } from "../i18n/idioma";
+import type { Idioma } from "../i18n/textos";
 import { gsap, useGSAP } from "../lib/gsap";
-import { rolarPara } from "../lib/scroll";
+import { guardarPosicao, rolarPara } from "../lib/scroll";
 
-const LINKS = [
-  ["#sobre", "Sobre"],
-  ["#stack", "Stack"],
-  ["#momentos", "Momentos"],
-  ["#contato", "Contato"],
-];
+const IDIOMAS: Idioma[] = ["pt", "en"];
 
 export default function Nav() {
   const barra = useRef<HTMLDivElement>(null);
+  const { idioma, t, setIdioma } = useIdioma();
+  const links = [
+    ["#sobre", t.nav.sobre],
+    ["#stack", t.nav.stack],
+    ["#momentos", t.nav.momentos],
+    ["#contato", t.nav.contato],
+  ];
 
   useGSAP(() => {
     gsap.to(barra.current, {
@@ -34,7 +38,7 @@ export default function Nav() {
         E<span className="grad-text">L</span>
       </a>
       <nav>
-        {LINKS.map(([href, rotulo]) => (
+        {links.map(([href, rotulo]) => (
           <a
             key={href}
             href={href}
@@ -47,6 +51,22 @@ export default function Nav() {
           </a>
         ))}
       </nav>
+      <div className="nav-idioma" role="group" aria-label={t.nav.idioma}>
+        {IDIOMAS.map((i) => (
+          <button
+            key={i}
+            type="button"
+            aria-pressed={i === idioma}
+            onClick={() => {
+              if (i === idioma) return;
+              guardarPosicao();
+              setIdioma(i);
+            }}
+          >
+            {i.toUpperCase()}
+          </button>
+        ))}
+      </div>
     </header>
   );
 }

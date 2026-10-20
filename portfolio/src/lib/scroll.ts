@@ -23,6 +23,17 @@ export function rolarPara(alvo: string | number) {
   else document.querySelector(alvo)?.scrollIntoView({ behavior: "smooth" });
 }
 
+// Troca de idioma remonta a página: guarda e devolve a posição do scroll
+let posicaoGuardada = 0;
+export function guardarPosicao() {
+  posicaoGuardada = window.scrollY;
+}
+export function restaurarPosicao() {
+  ScrollTrigger.refresh();
+  if (lenis) lenis.scrollTo(posicaoGuardada, { immediate: true, force: true });
+  else window.scrollTo(0, posicaoGuardada);
+}
+
 export function travarScroll(travar: boolean) {
   if (travar) lenis?.stop();
   else lenis?.start();

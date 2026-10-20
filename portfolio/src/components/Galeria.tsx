@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { foto, momentos } from "../data";
+import { useIdioma } from "../i18n/idioma";
 import { revelarTitulo } from "../lib/efeitos";
 import { gsap, useGSAP } from "../lib/gsap";
 
@@ -7,6 +8,7 @@ import { gsap, useGSAP } from "../lib/gsap";
 export default function Galeria() {
   const raiz = useRef<HTMLElement>(null);
   const trilho = useRef<HTMLDivElement>(null);
+  const { t } = useIdioma();
 
   useGSAP(
     () => {
@@ -57,19 +59,19 @@ export default function Galeria() {
       </span>
       <div className="galeria-trilho" ref={trilho}>
         <div className="galeria-intro">
-          <p className="eyebrow">03 — Fora do código</p>
+          <p className="eyebrow">{t.galeria.eyebrow}</p>
           <h2 className="titulo">
-            Pequenos <em className="serif">momentos</em>
+            {t.galeria.titulo} <em className="serif">{t.galeria.destaque}</em>
           </h2>
-          <p>Aviões, arte, praia e muito amor de pet: o que me inspira longe do teclado.</p>
+          <p>{t.galeria.texto}</p>
         </div>
         {momentos.map((m, i) => (
-          <figure key={m.foto} className={`momento m${i % 3}`}>
+          <figure key={m} className={`momento m${i % 3}`}>
             <div className="momento-img">
-              <img src={foto(m.foto)} alt={m.legenda} loading="lazy" />
+              <img src={foto(m)} alt={t.momentos[m]} loading="lazy" />
             </div>
             <figcaption>
-              <span>{String(i + 1).padStart(2, "0")}</span> {m.legenda}
+              <span>{String(i + 1).padStart(2, "0")}</span> {t.momentos[m]}
             </figcaption>
           </figure>
         ))}
